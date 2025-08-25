@@ -1,4 +1,4 @@
-import Report from "../models/report.js";
+import Report from "../models/Report.js";
 import Community from "../models/Community.js";
 import Outfit from "../models/Outfit.js"; 
 import User from "../models/User.js";
