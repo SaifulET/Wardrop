@@ -1,0 +1,110 @@
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import  SendEmail  from "./email.service.js"; // implement email sending
+import { OAuth2Client } from "google-auth-library";
+import appleSigninAuth from "apple-signin-auth";
+import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
+import Admin from "../models/Admin.js";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// Signup
+export const signup = async (data) => {
+  
+  const { name, username, email, password } = data;
+  const existingUser = await Admin.findOne({ $or: [{ email }, { username }] });
+  
+  if (existingUser) throw new Error("User already exists");
+  
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = new Admin({ name, username, email, password:hashedPassword });
+  console.log(user)
+  await user.save();
+  
+  return user;
+};
+
+// Signin
+export const signin = async (email, password) => {
+  const user = await Admin.findOne({ email });
+  if (!user) throw new Error("User not found");
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new Error("Invalid password");
+
+  const token = jwt.sign({ id: user._id }, JWT_KEY, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+await Admin.findOneAndUpdate(
+  { email:email },   // filter
+  { $set: { active: true } },  // update
+  { new: true }                // return updated doc
+);
+  return { user, token };
+};
+
+// Signout
+export const signout = async (req,res) => {
+  res.clearCookie("token", { httpOnly: true, sameSite: "Strict" });
+  await Admin.findOneAndUpdate({_id:req.headers.user_id},{active:false},{new:true})
+
+  return { message: "Signed out successfully" };
+};
+
+// Forgot Password → Send OTP
+export const forgotPassword = async (email) => {
+  const user = await Admin.findOne({ email });
+  console.log(user)
+  if (!user) throw new Error("User not found");
+
+  const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
+  user.otp = otp;
+  user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 mins
+  await user.save();
+
+  // Send OTP to email
+  await SendEmail(email, "Password Reset OTP", `Your OTP is ${otp}`);
+  
+  return { message: "OTP sent to email" };
+};
+
+// Reset Password → Verify OTP & Update
+export const resetPassword = async (email, otp, newPassword) => {
+  const user = await Admin.findOne({ email });
+  if (!user) throw new Error("User not found");
+  if (user.otp !== otp || Date.now() > user.otpExpires) throw new Error("Invalid or expired OTP");
+
+  user.password = newPassword;
+  user.otp = undefined;
+  user.otpExpires = undefined;
+  await user.save();
+
+  return { message: "Password reset successfully" };
+};
+
+// Google Login
+export const googleLogin = async (idToken) => {
+    const ticket = await client.verifyIdToken({
+    idToken,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+  const { email, name } = payload;
+
+  if (!email) throw new Error("Google account must have an email");
+
+  let user = await Admin.findOne({ email });
+  if (!user) {
+    const user = new Admin({
+      name,
+      email,
+      username:email.split("@")[0],
+      password: crypto.randomBytes(16).toString("hex")
+    });
+    await user.save();
+}
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+  return { user, token };
+};
