@@ -1,5 +1,8 @@
 import User from "../models/User.js";
 
+
+
+
 export const getUserProfile = async (userId) => {
     
   const user = await User.findById(userId).select("-password");
@@ -29,6 +32,8 @@ export const updateProfile = async (userId, jsonData,file) => {
 
   // Update only provided fields (PATCH behavior)
   if (updateData.name) user.name = updateData.name;
+  if(updateData.username)user.username=updateData.username;
+  if(updateData.gender)user.gender=updateData.gender;
   if (updateData.bio) user.bio = updateData.bio;
   if (updateData.phone)user.phone = updateData.phone;
   await user.save();

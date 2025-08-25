@@ -88,9 +88,7 @@ app.use("/style",StyleRoute)
 
 
 
-app.get("/", (req, res) => {
-  res.send("Hello from backend!");
-});
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)

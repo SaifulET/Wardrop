@@ -3,7 +3,8 @@ import * as authService from "../services/auth.service.js";
 // Signup
 export const signup = async (req, res) => {
   try {
-    const user = await authService.signup(req.body);
+    const {user,token} = await authService.signup(req.body);
+     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
     res.status(201).json({ success: true, data: user });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

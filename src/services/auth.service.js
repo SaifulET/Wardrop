@@ -10,28 +10,50 @@ import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
 export const signup = async (data) => {
-  const { name, username, email, password } = data;
+  const {  email, password,confirmPassword } = data;
   
   // Check for existing user first
-  const existingUser = await User.findOne({ 
-    $or: [{ email }, { username }] 
-  });
+  const existingUser = await User.findOne({email});
 
   if (existingUser) {
-    throw new Error('User already exists with this email or username');
+    throw new Error('User already exists with this email');
+  }
+  if(password !==confirmPassword){
+    throw new Error("Password and confirmPassword isn't same");
+  }
+  
+  if(password.length<6){
+     throw new Error('password must be alteast 6 characters');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   
   try {
     const user = new User({ 
-      name, 
-      username, 
       email, 
       password: hashedPassword 
     });
-    await user.save();
-    return user;
+    
+      const token = jwt.sign({ id: user._id }, JWT_KEY, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+  console.log(token)
+await User.findOneAndUpdate(
+  { email:email },   // filter
+  { $set: { active: true } },  
+  { new: true }                
+);
+const now = new Date();
+
+  // Set firstLogin if not set
+  if (!user.firstLogin) {
+    user.firstLogin = now;
+  }
+
+  // Add new login entry to loginHistory
+  user.loginHistory.push({ loginAt: now });
+  await user.save();
+    return {user,token};
   } catch (error) {
     if (error.code === 11000) {
       // Handle duplicate key error
@@ -41,6 +63,7 @@ export const signup = async (data) => {
     throw error;
   }
 };
+
 
 // Signin
 export const signin = async (email, password) => {
