@@ -157,17 +157,52 @@ export const verifyOtpService = async (email, otp) => {
 };
 
 // Reset Password → Verify OTP & Update
-export const resetPassword = async (email, otp, newPassword) => {
-  const user = await User.findOne({ email });
-  if (!user) throw new Error("User not found");
-  if (user.otp !== otp || Date.now() > user.otpExpires) throw new Error("Invalid or expired OTP");
+export const resetPassword = async (email, password, confirmPassword ) => {
+  
+   if(password !==confirmPassword){
+    throw new Error("Password and confirmPassword isn't same");
+  }
+  
+  if(password.length<6){
+     throw new Error('password must be alteast 6 characters');
+  }
 
-  user.password = newPassword;
-  user.otp = undefined;
-  user.otpExpires = undefined;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  try {
+    const user = new User({ 
+      email, 
+      password: hashedPassword 
+    });
+    
+      const token = jwt.sign({ id: user._id }, JWT_KEY, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+  console.log(token)
+await User.findOneAndUpdate(
+  { email:email },   // filter
+  { $set: { active: true } },  
+  { new: true }                
+);
+const now = new Date();
+
+  // Set firstLogin if not set
+  if (!user.firstLogin) {
+    user.firstLogin = now;
+  }
+
+  // Add new login entry to loginHistory
+  user.loginHistory.push({ loginAt: now });
   await user.save();
-
-  return { message: "Password reset successfully" };
+    return {user,token};
+  } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      console.log(error)
+      throw new Error('User already exists');
+    }
+    throw error;
+  }
 };
 
 // Google Login
