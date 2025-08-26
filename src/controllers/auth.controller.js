@@ -44,6 +44,17 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
+export const verifyOtpController = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const result = await authService.verifyOtpService(email, otp);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
 // Reset Password
 export const resetPassword = async (req, res) => {
   try {

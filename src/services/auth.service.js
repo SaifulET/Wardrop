@@ -138,6 +138,24 @@ export const forgotPassword = async (email) => {
   return { message: "OTP sent to email" };
 };
 
+
+export const verifyOtpService = async (email, otp) => {
+  const user = await User.findOne({ email });
+
+  if (!user) throw new Error("User not found");
+  if (!user.otp || !user.otpExpires) throw new Error("OTP not requested");
+
+  if (user.otp !== otp) throw new Error("Invalid OTP");
+  if (user.otpExpires < Date.now()) throw new Error("OTP expired");
+
+  // ✅ OTP valid → clear OTP
+  user.otp = null;
+  user.otpExpires = null;
+  await user.save();
+
+  return { message: "OTP verified successfully", email };
+};
+
 // Reset Password → Verify OTP & Update
 export const resetPassword = async (email, otp, newPassword) => {
   const user = await User.findOne({ email });

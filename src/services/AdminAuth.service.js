@@ -10,18 +10,58 @@ import Admin from "../models/Admin.js";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
 export const signup = async (data) => {
+  const {  email, password,confirmPassword } = data;
   
-  const { name, username, email, password } = data;
-  const existingUser = await Admin.findOne({ $or: [{ email }, { username }] });
+  // Check for existing user first
+  const existingUser = await Admin.findOne({email});
+
+  if (existingUser) {
+    throw new Error('User already exists with this email');
+  }
+  if(password !==confirmPassword){
+    throw new Error("Password and confirmPassword isn't same");
+  }
   
-  if (existingUser) throw new Error("User already exists");
-  
+  if(password.length<6){
+     throw new Error('password must be alteast 6 characters');
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new Admin({ name, username, email, password:hashedPassword });
-  console.log(user)
-  await user.save();
   
-  return user;
+  try {
+    const admin = new User({ 
+      email, 
+      password: hashedPassword 
+    });
+    
+      const token = jwt.sign({ id: user._id }, JWT_KEY, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+  console.log(token)
+await Admin.findOneAndUpdate(
+  { email:email },   // filter
+  { $set: { active: true } },  
+  { new: true }                
+);
+const now = new Date();
+
+  // Set firstLogin if not set
+  if (!admin.firstLogin) {
+    admin.firstLogin = now;
+  }
+
+  // Add new login entry to loginHistory
+  admin.loginHistory.push({ loginAt: now });
+  await admin.save();
+    return {admin,token};
+  } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      console.log(error)
+      throw new Error('User already exists');
+    }
+    throw error;
+  }
 };
 
 // Signin
