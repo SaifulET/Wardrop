@@ -29,29 +29,15 @@ export const signup = async (data) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   
   try {
-    const admin = new User({ 
+    const admin = new Admin({ 
       email, 
       password: hashedPassword 
     });
     
-      const token = jwt.sign({ id: user._id }, JWT_KEY, {
+      const token = jwt.sign({ id: admin._id }, JWT_KEY, {
     expiresIn: JWT_EXPIRE_TIME || "7d",
   });
-  console.log(token)
-await Admin.findOneAndUpdate(
-  { email:email },   // filter
-  { $set: { active: true } },  
-  { new: true }                
-);
-const now = new Date();
 
-  // Set firstLogin if not set
-  if (!admin.firstLogin) {
-    admin.firstLogin = now;
-  }
-
-  // Add new login entry to loginHistory
-  admin.loginHistory.push({ loginAt: now });
   await admin.save();
     return {admin,token};
   } catch (error) {
@@ -67,6 +53,7 @@ const now = new Date();
 // Signin
 export const signin = async (email, password) => {
   const user = await Admin.findOne({ email });
+  console.log(email,user)
   if (!user) throw new Error("User not found");
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -80,7 +67,7 @@ await Admin.findOneAndUpdate(
   { $set: { active: true } },  // update
   { new: true }                // return updated doc
 );
-  return { user, token };
+  return { gmail:user.email, token };
 };
 
 // Signout

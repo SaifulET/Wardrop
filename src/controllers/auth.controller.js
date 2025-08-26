@@ -1,8 +1,17 @@
 import * as authService from "../services/auth.service.js";
+import { emailSchema } from "../utils/Validation.js";
+
 
 // Signup
 export const signup = async (req, res) => {
   try {
+  const result = emailSchema.safeParse(req.body.email); // ❌ invalid
+  console.log(result.success)
+  if (!result.success) {
+    console.log("dk")
+    return res.json({error:result.error.errors[0].message}); // 👉 "Invalid email address"
+  }
+  
     const {user,token} = await authService.signup(req.body);
      res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
     res.status(201).json({ success: true, data: user });
@@ -58,6 +67,7 @@ export const verifyOtpController = async (req, res) => {
 // Reset Password
 export const resetPassword = async (req, res) => {
   try {
+
     const { email, newPassword, ConfirmPassword } = req.body;
     const data = await authService.resetPassword(email,  newPassword,ConfirmPassword,);
     res.status(200).json({ success: true, message: data.message });

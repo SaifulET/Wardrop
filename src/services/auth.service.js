@@ -121,18 +121,20 @@ const user=  await User.findOneAndUpdate({_id:req.headers.user_id},{active:false
 
 // Forgot Password → Send OTP
 export const forgotPassword = async (email) => {
+  console.log("lksdlksd")
   const user = await User.findOne({ email });
   
   if (!user) throw new Error("User not found");
 
-  const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
+  const otp = crypto.randomInt(1000, 9999).toString(); // 4-digit OTP
   user.otp = otp;
-  user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 mins
+  console.log(otp,"jflskd")
+  user.otpExpires = Date.now() + 5 * 60 * 1000; // 10 mins
   await user.save();
 
   // Send OTP to email
   console.log(email)
-  await SendEmail(email, "Password Reset OTP", `Your OTP is ${otp}`);
+  await SendEmail(email, `The Otp is ${otp}. And it valid for 5 mins `, `Your OTP is ${otp}`);
   
   
   return { message: "OTP sent to email" };
@@ -158,11 +160,11 @@ export const verifyOtpService = async (email, otp) => {
 
 // Reset Password → Verify OTP & Update
 export const resetPassword = async (email, password, confirmPassword ) => {
-  
+  console.log(password)
    if(password !==confirmPassword){
     throw new Error("Password and confirmPassword isn't same");
   }
-  
+  console.log(password.length)
   if(password.length<6){
      throw new Error('password must be alteast 6 characters');
   }
@@ -178,7 +180,6 @@ export const resetPassword = async (email, password, confirmPassword ) => {
       const token = jwt.sign({ id: user._id }, JWT_KEY, {
     expiresIn: JWT_EXPIRE_TIME || "7d",
   });
-  console.log(token)
 await User.findOneAndUpdate(
   { email:email },   // filter
   { $set: { active: true } },  
@@ -193,7 +194,9 @@ const now = new Date();
 
   // Add new login entry to loginHistory
   user.loginHistory.push({ loginAt: now });
+  
   await user.save();
+
     return {user,token};
   } catch (error) {
     if (error.code === 11000) {
