@@ -68,8 +68,8 @@ export const verifyOtpController = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
 
-    const { email, newPassword, ConfirmPassword } = req.body;
-    const data = await authService.resetPassword(email,  newPassword,ConfirmPassword,);
+    const { email, newPassword, confirmPassword } = req.body;
+    const data = await authService.resetPassword(email,  newPassword,confirmPassword,);
     res.status(200).json({ success: true, message: data.message });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
