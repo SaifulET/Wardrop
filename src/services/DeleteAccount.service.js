@@ -35,3 +35,6 @@ export const requestDeleteAccount = async (userId) => {
     { new: true }
   );
 };
+export const AllDeleteAccountList=async()=>{
+  return await User.find({disabled:true}).select( " _id username email")
+}

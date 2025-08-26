@@ -1,18 +1,16 @@
 import mongoose from "mongoose";
 
-const notificationSchema = new mongoose.Schema(
+const AdminnotificationSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    adminMessage: {
-      title: String,
-      description: String,
-      image: String,
-      link: String
-    },
-    status: { type: String, enum: ["active", "hold"], default: "hold" }, // per user
+    title: { type: String, required: true },
+    description: { type: String },
+    image: { type: String },
+    link: { type: String },
+    status: { type: String, enum: ["active", "hold"], default: "active" }, // admin decides
     read: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
 
-export default mongoose.model("AdminNotification", notificationSchema);
+export default mongoose.model("AdminNotification", AdminnotificationSchema);

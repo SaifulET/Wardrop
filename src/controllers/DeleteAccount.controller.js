@@ -1,4 +1,4 @@
-import { deleteAccountService, requestDeleteAccount } from "../services/DeleteAccount.service.js";
+import { AllDeleteAccountList, deleteAccountService, requestDeleteAccount } from "../services/DeleteAccount.service.js";
 
 export const deleteAccountController = async (req, res) => {
   try {
@@ -36,3 +36,12 @@ export const requestForAccountDelete = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const AllDeleteAccountListController=async(req,res)=>{
+  try {
+    const allAccount= await AllDeleteAccountList();
+    res.json({Account: allAccount})
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+}

@@ -28,6 +28,9 @@ import Dashboardroute from "./routes/Dashboard.routes.js";
 import UserDetailsRoute from "./routes/UserDetailsManagement.route.js";
 import ReportRoute from "./routes/Report.routes.js";
 import StyleRoute from "./routes/Style.routes.js";
+import AffiliateDataRoute from "./routes/AffiliateData.routes.js";
+import CategoryRoute from "./routes/Category.routes.js";
+import MetarialRoute from "./routes/Metarials.routes.js";
 
 
 
@@ -85,6 +88,10 @@ app.use("/userManagement",UserDetailsRoute)
 
 app.use("/AdminAuth",AdminAuthRoutes);
 app.use("/style",StyleRoute)
+app.use("/Category",CategoryRoute)
+app.use("/Metarial",MetarialRoute)
+
+app.use("/affiliateData",AffiliateDataRoute)
 
 
 

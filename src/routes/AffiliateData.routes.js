@@ -1,9 +1,19 @@
 import express from "express";
-import { authCheck } from "../middlewares/auth.middleware.js";
+import {
+  createAffiliateData,
+  getAllAffiliateData,
+  editAffiliateData,
+  deleteAffiliateData,
+  getAffiliatedDataById
+} from "../controllers/AffiliateData.controller.js";
 
-const PrivacyRoute = express.Router();
+const AffiliateDataRoute = express.Router();
 
-PrivacyRoute.get("/CheckPrivacy", authCheck, getPrivacyController);
-PrivacyRoute.patch("/changePrivacy", authCheck, updatePrivacyController);
+// Admin notification management
+AffiliateDataRoute.post("/notifications", createAffiliateData);     // Create
+AffiliateDataRoute.get("/notifications", getAllAffiliateData);     // View all
+AffiliateDataRoute.get("/notificationsById/:id", getAffiliatedDataById);     // View all
+AffiliateDataRoute.put("/notifications/:id", editAffiliateData);    // Edit
+AffiliateDataRoute.delete("/notifications/:id", deleteAffiliateData); // Delete
 
-export default PrivacyRoute;
+export default AffiliateDataRoute;
