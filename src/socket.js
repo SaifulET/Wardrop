@@ -36,6 +36,12 @@ export const sendNotificationToUser = (userId, notification) => {
   }
 };
 
+
+export const sendNotificationToAdmin = (userId, notification) => {
+  if (io) {
+    io.to(userId.toString()).emit("Adminnotification", notification);
+  }
+};
 // Function to broadcast to all users (optional)
 export const broadcastNotification = (notification) => {
   if (io) {

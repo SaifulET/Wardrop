@@ -71,7 +71,7 @@ export const signin = async (email, password) => {
   
   if (!user) throw new Error("User not found");
   if (user.disabled) throw new Error("Account has banned!");
-  if(user.active) throw new Error("Already LogedIn");
+  // if(user.active) throw new Error("Already LogedIn");
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid password");
