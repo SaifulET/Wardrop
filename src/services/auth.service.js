@@ -177,32 +177,16 @@ export const resetPassword = async (email, password, confirmPassword ) => {
       password: hashedPassword 
     });
     
-      const token = jwt.sign({ id: user._id }, JWT_KEY, {
-    expiresIn: JWT_EXPIRE_TIME || "7d",
-  });
-await User.findOneAndUpdate(
-  { email:email },   // filter
-  { $set: { active: true } },  
-  { new: true }                
-);
-const now = new Date();
-
-  // Set firstLogin if not set
-  if (!user.firstLogin) {
-    user.firstLogin = now;
-  }
-
-  // Add new login entry to loginHistory
-  user.loginHistory.push({ loginAt: now });
+      
   
   await user.save();
 
-    return {user,token};
+    return {user};
   } catch (error) {
     if (error.code === 11000) {
       // Handle duplicate key error
       console.log(error)
-      throw new Error('User already exists');
+      throw new Error('Error');
     }
     throw error;
   }

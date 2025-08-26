@@ -53,7 +53,6 @@ export const signup = async (data) => {
 // Signin
 export const signin = async (email, password) => {
   const user = await Admin.findOne({ email });
-  console.log(email,user)
   if (!user) throw new Error("User not found");
 
   const isMatch = await bcrypt.compare(password, user.password);
