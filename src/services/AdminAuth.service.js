@@ -6,6 +6,7 @@ import { OAuth2Client } from "google-auth-library";
 import appleSigninAuth from "apple-signin-auth";
 import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
 import Admin from "../models/Admin.js";
+import { createAdminNotification } from "./AdminNotification.services.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
@@ -39,6 +40,7 @@ export const signup = async (data) => {
   });
 
   await admin.save();
+
     return {admin,token};
   } catch (error) {
     if (error.code === 11000) {

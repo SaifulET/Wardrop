@@ -2,6 +2,7 @@ import Report from "../models/Report.js";
 import Community from "../models/Community.js";
 import Outfit from "../models/Outfit.js"; 
 import User from "../models/User.js";
+import { createAdminNotification } from "./AdminNotification.services.js";
 
 export const createReportService = async ({ reporterId, targetUserId=null, targetCommunityId=null, reason, reportType }) => {
 
@@ -17,24 +18,35 @@ export const createReportService = async ({ reporterId, targetUserId=null, targe
     
     if (!community) throw new Error("Community post not found");
 
-    return await Report.create({
+    const report= await Report.create({
       reporter: reporterId,
       targetUser:  community.user, 
       targetCommunity: targetCommunityId,
       reason,
       reportType,
     });
+
+    await createAdminNotification({
+      userId: reporterId,
+      ReportId: report._id
+    });
+    return report 
   }
 
   if (reportType === "profile") {
     if (!targetUserId) throw new Error("targetUserId required for user report");
 
-    return await Report.create({
+    const report= await Report.create({
       reporter: reporterId,
       targetUser: targetUserId,
       reason,
       reportType,
     });
+    await createAdminNotification({
+      userId: reporterId,
+      ReportId: report._id
+    });
+    return report
   }
 };
 

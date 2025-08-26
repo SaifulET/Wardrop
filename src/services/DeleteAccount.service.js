@@ -4,6 +4,7 @@ import Outfit from "../models/Outfit.js";
 import Item from "../models/Item.js";
 import Notification from "../models/Notification.js";
 import Wishlist from "../models/Wishlist.js";
+import { createAdminNotification } from "./AdminNotification.services.js";
 
 export const deleteAccountService = async (userId) => {
   // Delete all notifications of the user
@@ -29,11 +30,17 @@ export const deleteAccountService = async (userId) => {
   return deletedUser;
 };
 export const requestDeleteAccount = async (userId) => {
-  return await User.findByIdAndUpdate(
+  const deleteAccount= await User.findByIdAndUpdate(
     userId,
     { disabled: true},
     { new: true }
   );
+  await createAdminNotification({
+      userId,
+      deleteId: userId
+    });
+  return deleteAccount
+
 };
 export const AllDeleteAccountList=async()=>{
   return await User.find({disabled:true}).select( " _id username email")

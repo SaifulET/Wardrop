@@ -1,9 +1,14 @@
 import Feedback from "../models/Feedback.js";
+import { createAdminNotification } from "./AdminNotification.services.js";
 
 // Create feedback
 export const createFeedback = async (userId, data) => {
   const { title, message } = data;
   const feedback = new Feedback({ user: userId, title, message });
+  await createAdminNotification({
+      userId,
+      FeedbackId: feedback._id
+    });
   return await feedback.save();
 };
 
