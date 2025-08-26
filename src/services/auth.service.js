@@ -85,8 +85,6 @@ await User.findOneAndUpdate(
   { new: true }                
 );
 
-
-
 const now = new Date();
 
   // Set firstLogin if not set

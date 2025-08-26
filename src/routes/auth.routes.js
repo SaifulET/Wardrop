@@ -13,7 +13,7 @@ authRoutes.post("/verifyOtp",verifyOtpController )
 authRoutes.post("/reset-password", resetPassword)
 authRoutes.post("/google",googleLogin )
 authRoutes.post("/apple", appleLogin )
-authRoutes.get("/signout",authCheck, signout)
+authRoutes.post("/signout",authCheck, signout)
 
 
 
