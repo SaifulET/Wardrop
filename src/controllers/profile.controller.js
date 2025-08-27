@@ -12,6 +12,7 @@ export const getProfile = async (req, res, next) => {
 export const updateProfile = async (req, res, next) => {
   try {
     const userId = req.headers.user_id;
+    
     console.log(userId,"slkfjls")
 
     const updateData = req.body.data; // Assuming the update data is in the request body

@@ -77,7 +77,7 @@ export const googleLogin = async (req, res) => {
 export const updateAdminProfileController = async (req, res, next) => {
   try {
     const userId = req.headers.user_id;
-   
+   console.log(userId)
     const updateData = req.body.data; // Assuming the update data is in the request body
     const file = req.file; // Assuming multer middleware is used to handle file uploads
 console.log(updateData)

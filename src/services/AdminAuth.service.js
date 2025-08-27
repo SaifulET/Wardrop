@@ -139,10 +139,10 @@ export const googleLogin = async (idToken) => {
 
 
 export const updateAdminProfile = async (userId, jsonData,file) => {
-  
+  console.log(userId)
    const  updateData= JSON.parse(jsonData);
    
-  const user = await Admin.findById({_id:userId})
+  const user = await Admin.findById(userId)
   console.log(user)
 
 
