@@ -12,7 +12,7 @@ export const getUserProfile = async (userId) => {
 export const updateProfile = async (userId, updateData,file) => {
 try {
   //  const  updateData= JSON.parse(Data);
-   
+   console.log(updateData,"from service")
   const user = await User.findById(userId)
 
   if (!user) {
