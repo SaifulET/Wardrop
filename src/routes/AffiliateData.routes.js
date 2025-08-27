@@ -6,14 +6,15 @@ import {
   deleteAffiliateData,
   getAffiliatedDataById
 } from "../controllers/AffiliateData.controller.js";
+import  { conditionalUpload } from "../middlewares/multer.middleware.js"
 
 const AffiliateDataRoute = express.Router();
 
 // Admin notification management
-AffiliateDataRoute.post("/notifications", createAffiliateData);     // Create
-AffiliateDataRoute.get("/notifications", getAllAffiliateData);     // View all
+AffiliateDataRoute.post("/notifications",conditionalUpload, createAffiliateData);     // Create
+AffiliateDataRoute.get("/getnotifications", getAllAffiliateData);     // View all
 AffiliateDataRoute.get("/notificationsById/:id", getAffiliatedDataById);     // View all
-AffiliateDataRoute.put("/notifications/:id", editAffiliateData);    // Edit
+AffiliateDataRoute.put("/notifications/:id",conditionalUpload, editAffiliateData);    // Edit
 AffiliateDataRoute.delete("/notifications/:id", deleteAffiliateData); // Delete
 
 export default AffiliateDataRoute;

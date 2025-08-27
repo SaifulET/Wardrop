@@ -8,7 +8,13 @@ import {
 
 export const createAffiliateData = async (req, res) => {
   try {
-    const result = await createNotificationService(req.body);
+
+// const data =JSON.parse(req.body.data);
+    const data=req.body;
+    console.log(data,"from 9th")
+    if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
+
+    const result = await createNotificationService(data);
     res.status(201).json({ success: true, data: result });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -27,7 +33,11 @@ export const getAllAffiliateData = async (req, res) => {
 export const editAffiliateData = async (req, res) => {
   try {
     const { id } = req.params;
-    const notification = await editNotificationService(id, req.body);
+    // const data =JSON.parse(req.body.data);
+    const data=req.body;
+    console.log(data,"from 9th")
+    if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
+    const notification = await editNotificationService(id, data);
     if (!notification) return res.status(404).json({ success: false, message: "Notification not found" });
     res.status(200).json({ success: true, data: notification });
   } catch (error) {

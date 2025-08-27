@@ -11,7 +11,7 @@ export const createNotificationService = async (data) => {
    
     title: data.title,
     description: data.description,
-    // image: data.image,
+    image: data.image,
     link: data.link,
     
   };
