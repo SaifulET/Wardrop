@@ -1,7 +1,24 @@
 import Category from "../models/category.js";
 import Item from "../models/Item.js";
+import Materials from "../models/Materials.js";
+import Category from "../models/category.js";
 
 export const createItem = async (data, userId) => {
+const { category, material, ...rest } = data;
+
+    // Convert category names to ObjectIds
+    const categoryDocs = await Category.find({ name: { $in: category } });
+    const materialDocs = await Materials.find({ name: { $in: material } });
+
+    const Item = new Item({
+      ...rest,
+      category: categoryDocs.map(c => c._id),
+      material: materialDocs.map(m => m._id)
+    });
+
+
+
+
   const item = new Item({ ...data, user: userId });
   return await item.save();
 };
