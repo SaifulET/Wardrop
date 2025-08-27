@@ -19,7 +19,7 @@ console.log(data,"from 7 line")
 console.log(item)
 
   // const item = new Item({ ...data, user: userId });
-  return await Item.save();
+  return await item.save();
 };
 
 export const getItems = async (filters,id) => {
