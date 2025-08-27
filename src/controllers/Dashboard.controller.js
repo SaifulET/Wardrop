@@ -12,8 +12,9 @@ export const getAllStats = async (req, res) => {
     
     const reportsWithPost = await StatsService.getReportsWithPost();
     const reportIdsOnly = await StatsService.getReportsIdsOnly();
-    const yearlyUsers = await StatsService.getYearlyUserStats();
-    const yearlyLogins = await StatsService.getYearlyLoginStats();
+    const AffiliateData = await StatsService.getTotalAffiliateData()
+    // const yearlyUsers = await StatsService.getYearlyUserStats();
+    // const yearlyLogins = await StatsService.getYearlyLoginStats();
 
 
 
@@ -24,13 +25,14 @@ export const getAllStats = async (req, res) => {
       activeUsers,
       dailyOutfits,
       feedbackCount,
+      AffiliateData,
       DataComplianceCount,
       getAllReportsCount,
         ReportCount ,
       reportsWithPost,
       reportIdsOnly,
-      yearlyUsers,
-      yearlyLogins
+      // yearlyUsers,
+      // yearlyLogins
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

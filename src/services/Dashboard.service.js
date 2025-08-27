@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Outfit from "../models/Outfit.js";
 import Community from "../models/Community.js";
 import Feedback from "../models/Feedback.js";
+import AffiliateData from "../models/AffiliateData.js";
 
 export const getTotalUsers = async () => {
   return await User.countDocuments();
@@ -22,6 +23,9 @@ export const getDailyUploadedOutfits = async (date = new Date()) => {
 
 export const getTotalFeedbacks = async () => {
   return await Feedback.countDocuments();
+};
+export const getTotalAffiliateData = async () => {
+  return await AffiliateData.countDocuments();
 };
 
 export const countDisabledUsers = async () => {

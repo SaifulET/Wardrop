@@ -6,19 +6,18 @@ import User from "../models/User.js";
  * Create notification for ALL users
  */
 export const createNotificationService = async (data) => {
-  const users = await User.find({}, "_id");
 
-  const notifications = users.map((u) => ({
-    user: u._id,
+  const notifications = {
+   
     title: data.title,
     description: data.description,
     // image: data.image,
     link: data.link,
     
-  }));
+  };
 
-  await AffiliateDatas.insertMany(notifications);
-  return { message: "Notification sent to all users" };
+  return await AffiliateDatas.insertMany(notifications);
+  // return { message: "Notification sent to all users" };
 };
 
 /**

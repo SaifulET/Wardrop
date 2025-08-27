@@ -6,6 +6,7 @@ export const createItem = async (req, res, next) => {
     
     // const data =JSON.parse(req.body.data);
     const data=req.body;
+    console.log(data,"from 9th")
     if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
     const item = await itemService.createItem(data, req.headers.user_id);
     res.status(201).json(item);
@@ -38,6 +39,7 @@ export const updateItem = async (req, res, next) => {
   try {
     // const data = JSON.parse(req.body.data);
     const data = req.body
+    console.log(data)
     if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
     const item = await itemService.updateItem(req.params.id, data, req.headers.user_id);
     if (!item) return res.status(404).json({ message: "Item not found" });
