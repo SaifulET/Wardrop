@@ -12,7 +12,7 @@ if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder, { recursive: true }
 
 // Use memory storage first to check file hash
 const storage = multer.memoryStorage();
-const upload = multer({ storage }).single("profileImage");
+const upload = multer({ storage }).single("file");
 
 export const conditionalUpload = (req, res, next) => {
   const contentType = req.headers["content-type"] || "";
@@ -21,25 +21,25 @@ export const conditionalUpload = (req, res, next) => {
 
   upload(req, res, (err) => {
     if (err) return next(err);
-    console.log(req.body)
+    console.log(req.body.file,"line24")
 
-    if (!req.file) return next();
+    if (!req.body.file) return next();
 
     // Generate hash of file content
-    const hash = crypto.createHash("md5").update(req.file.buffer).digest("hex");
-    const ext = path.extname(req.file.originalname);
+    const hash = crypto.createHash("md5").update(req.body.file.buffer).digest("hex");
+    const ext = path.extname(req.body.file.originalname);
     const filename = `${hash}${ext}`;
     const filepath = path.join(uploadFolder, filename);
 
     // If file already exists, just set req.file.path
     if (fs.existsSync(filepath)) {
-      req.file.path = filepath;
+      req.body.file.path = filepath;
       return next();
     }
 
     // Otherwise, save file to disk
-    fs.writeFileSync(filepath, req.file.buffer);
-    req.file.path = filepath;
+    fs.writeFileSync(filepath, req.body.file.buffer);
+    req.body.file.path = filepath;
 
     next();
   });
