@@ -24,7 +24,7 @@ export const deleteCategoryService = async (CategoryId) => {
 
 // Get All Styles (Users + Admin)
 export const getAllCategoryService = async () => {
-  const Category = await category.find().select("name createdAt");
+  const Category = await category.find().select("category createdAt");
   return Category;
 };
 
