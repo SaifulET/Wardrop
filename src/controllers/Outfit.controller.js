@@ -11,7 +11,8 @@ export const createOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
   
-     const {title,season,style} = JSON.parse(req.body.data);
+    //  const {title,season,style} = JSON.parse(req.body.data);
+     const {title,season,style} = req.body
     
     // file comes from multer
     const imagePath = req.file ? req.file.path : null;
@@ -31,7 +32,9 @@ export const updateOutfitController = async (req, res) => {
     const outfitId  = req.params.id;
     let updateData={}
     if(req.body.data){
-       const { title, season, style } = JSON.parse(req.body.data);
+      //  const { title, season, style } = JSON.parse(req.body.data);
+       const { title, season, style } = req.body;
+      
 
     // If new image is uploaded
     updateData = { title, season, style };

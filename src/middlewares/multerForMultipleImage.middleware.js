@@ -12,12 +12,12 @@ if (!fs.existsSync(uploadFolder)) {
 
 // store files in memory to compute hash first
 const storage = multer.memoryStorage();
-const upload = multer({ storage }).array("images", 10); // field name = images, max 10 files
+const upload = multer({ storage }).array("file", 10); // field name = images, max 10 files
 
 export const conditionalMultipleUpload = (req, res, next) => {
   const contentType = req.headers["content-type"] || "";
 
-  if (!contentType.includes("multipart/form-data")) return next(); // skip if no files
+  // if (!contentType.includes("multipart/form-data")) return next(); // skip if no files
 
   upload(req, res, (err) => {
     if (err) return next(err);
