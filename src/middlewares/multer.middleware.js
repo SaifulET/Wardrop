@@ -12,7 +12,7 @@ if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder, { recursive: true }
 
 // Use memory storage first to check file hash
 const storage = multer.memoryStorage();
-const upload = multer({ storage }).single("file");
+const upload = multer({ storage }).single("profileImage");
 
 export const conditionalUpload = (req, res, next) => {
   const contentType = req.headers["content-type"] || "";
