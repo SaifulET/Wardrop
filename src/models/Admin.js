@@ -3,8 +3,10 @@ import bcrypt from "bcrypt";
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
-  username: { type: String,  unique: true },
   name: { type: String },
+  profile:{type:String},
+  dob:{type:Date},
+  gender: { type: String, enum: ["male", "female", "other"] },
   otp: { type: String },
   otpExpires: { type: Date },
 }, { timestamps: true });

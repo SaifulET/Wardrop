@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AdminnotificationSchema = new mongoose.Schema(
+const AffiliatedSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true },
@@ -13,4 +13,4 @@ const AdminnotificationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("AdminNotification", AdminnotificationSchema);
+export default mongoose.model("affiliatedSchema", AffiliatedSchema);

@@ -1,5 +1,5 @@
 // import Notification from "../models/Notification.js";
-import AdminNotification from "../models/AffiliateData.js"
+import AffiliateDatas from "../models/AffiliateData.js"
 import User from "../models/User.js";
 
 /**
@@ -17,7 +17,7 @@ export const createNotificationService = async (data) => {
     
   }));
 
-  await AdminNotification.insertMany(notifications);
+  await AffiliateDatas.insertMany(notifications);
   return { message: "Notification sent to all users" };
 };
 
@@ -25,28 +25,28 @@ export const createNotificationService = async (data) => {
  * View all notifications (admin side)
  */
 export const getAllNotificationsService = async () => {
-  return await AdminNotification.find()
+  return await AffiliateDatas.find()
 };
 
 /**
  * Edit notification (update for all users)
  */
 export const editNotificationService = async (id, updateData) => {
-  return await AdminNotification.findByIdAndUpdate(id, updateData, { new: true });
+  return await AffiliateDatas.findByIdAndUpdate(id, updateData, { new: true });
 };
 
 /**
  * Delete notification (remove from all users)
  */
 export const deleteNotificationService = async (id) => {
-  return await AdminNotification.findByIdAndDelete(id);
+  return await AffiliateDatas.findByIdAndDelete(id);
 };
 
 
 
 
 export const getNotificationByIdService = async (id) => {
-  return await AdminNotification.findById(id)
+  return await AffiliateDatas.findById(id)
 
 };
 

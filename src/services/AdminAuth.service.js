@@ -136,3 +136,34 @@ export const googleLogin = async (idToken) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
   return { user, token };
 };
+
+
+export const updateAdminProfile = async (userId, jsonData,file) => {
+  
+   const  updateData= JSON.parse(jsonData);
+   
+  const user = await Admin.findById({_id:userId})
+  console.log(user)
+
+
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // If image is provided
+
+  if (file) {
+    // Local storage example
+    const imagePath = `/uploads/profile/${file.filename}`;
+  
+    user.profile = imagePath;
+  }
+
+  // Update only provided fields (PATCH behavior)
+  if (updateData.name) user.name = updateData.name;
+  if(updateData.gender)user.gender=updateData.gender;
+  if(updateData.dob)user.dob=updateData.dob;
+  await user.save();
+  return user;
+};

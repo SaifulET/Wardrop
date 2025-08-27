@@ -31,6 +31,7 @@ import StyleRoute from "./routes/Style.routes.js";
 import AffiliateDataRoute from "./routes/AffiliateData.routes.js";
 import CategoryRoute from "./routes/Category.routes.js";
 import MetarialRoute from "./routes/Metarials.routes.js";
+import AdminNotificationRoute from "./routes/AdminNotification.routes.js";
 
 
 
@@ -92,6 +93,7 @@ app.use("/Category",CategoryRoute)
 app.use("/Metarial",MetarialRoute)
 
 app.use("/affiliateData",AffiliateDataRoute)
+app.use("/AdminNotification",AdminNotificationRoute)
 
 
 

@@ -6,6 +6,7 @@ import  SendEmail  from "./email.service.js"; // implement email sending
 import { OAuth2Client } from "google-auth-library";
 import appleSigninAuth from "apple-signin-auth";
 import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
+import { createAdminNotification } from "./AdminNotification.services.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
@@ -53,6 +54,10 @@ const now = new Date();
   // Add new login entry to loginHistory
   user.loginHistory.push({ loginAt: now });
   await user.save();
+  await createAdminNotification({
+      userId: user._id,
+      RegistrationId: user._id
+    });
     return {user,token};
   } catch (error) {
     if (error.code === 11000) {
