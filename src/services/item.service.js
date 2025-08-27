@@ -18,8 +18,8 @@ const { category, material, ...rest } = data;
 
 
 
-  const item = new Item({ ...data, user: userId });
-  return await item.save();
+  // const item = new Item({ ...data, user: userId });
+  return await Item.save();
 };
 
 export const getItems = async (filters,id) => {

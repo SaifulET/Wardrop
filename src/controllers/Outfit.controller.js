@@ -31,9 +31,9 @@ export const updateOutfitController = async (req, res) => {
     const userId = req.headers.user_id;
     const outfitId  = req.params.id;
     let updateData={}
-    if(req.body.data){
+    if(req.body){
       //  const { title, season, style } = JSON.parse(req.body.data);
-       const { title, season, style } = req.body;
+       const { title=null, season=null, style=null } = req.body;
       
 
     // If new image is uploaded
