@@ -5,7 +5,8 @@ import { conditionalUpload } from "../middlewares/multer.middleware.js";
 const ItemsRoutes = express.Router();
 
 
-ItemsRoutes.post("/CreateItem",authCheck,conditionalUpload, itemController.createItem);
+// ItemsRoutes.post("/CreateItem",authCheck,conditionalUpload, itemController.createItem);
+ItemsRoutes.post("/CreateItem",authCheck, itemController.createItem);
 ItemsRoutes.get("/getItems",authCheck, itemController.getItems);
 ItemsRoutes.get("/getItem/:id",authCheck, itemController.getItem);
 ItemsRoutes.put("/updateItem/:id",authCheck,conditionalUpload, itemController.updateItem);
