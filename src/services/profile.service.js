@@ -10,23 +10,22 @@ export const getUserProfile = async (userId) => {
   return user;
 };
 export const updateProfile = async (userId, jsonData,file) => {
-  console.log(userId)
+try {
    const  updateData= JSON.parse(jsonData);
    
   const user = await User.findById(userId)
-
-console.log(user)
 
   if (!user) {
     throw new Error("User not found");
   }
 
+
   // If image is provided
 
   if (file) {
     // Local storage example
-    const imagePath = `/uploads/profile/${file.filename}`;
-  
+    const imagePath = `/uploads/profile/${file.originalname}`;
+  console.log(imagePath)
     user.profileImage = imagePath;
   }
 
@@ -38,5 +37,9 @@ console.log(user)
   if (updateData.phone)user.phone = updateData.phone;
   await user.save();
   return user;
+  
+} catch (error) {
+  return error
+}
 };
 

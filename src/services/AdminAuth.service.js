@@ -139,11 +139,12 @@ export const googleLogin = async (idToken) => {
 
 
 export const updateAdminProfile = async (userId, jsonData,file) => {
-  console.log(userId)
+  try {
+ 
    const  updateData= JSON.parse(jsonData);
    
   const user = await Admin.findById(userId)
-  console.log(user)
+
 
 
 
@@ -155,8 +156,7 @@ export const updateAdminProfile = async (userId, jsonData,file) => {
 
   if (file) {
     // Local storage example
-    const imagePath = `/uploads/profile/${file.filename}`;
-  
+    const imagePath = `/uploads/profile/${file.filename}`;  
     user.profile = imagePath;
   }
 
@@ -165,5 +165,15 @@ export const updateAdminProfile = async (userId, jsonData,file) => {
   if(updateData.gender)user.gender=updateData.gender;
   if(updateData.dob)user.dob=updateData.dob;
   await user.save();
+  return user;
+  } catch (error) {
+    return error
+  }
+};
+
+export const getAdminProfile = async (userId) => {
+    
+  const user = await Admin.findById(userId).select("-password");
+  if (!user) throw new Error("User not found");
   return user;
 };

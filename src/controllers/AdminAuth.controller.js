@@ -87,3 +87,14 @@ console.log(updateData)
     next(error);
   }
 };
+
+
+export const getAdminProfileController = async (req, res, next) => {
+  try {
+    const profile = await authService.getAdminProfile(req.headers.user_id);
+    res.json(profile);
+  } catch (error) {
+    next(error);
+  }
+};
+
