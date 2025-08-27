@@ -14,7 +14,7 @@ export const updateProfile = async (req, res, next) => {
     const userId = req.headers.user_id;
     const updateData = req.body.data; // Assuming the update data is in the request body
     const file = req.file;
-    console.log(updateData,file,"lkdsjldj")
+    console.log(updateData,file,"line at 17",req.body)
     // Assuming multer middleware is used to handle file uploads
     const updatedProfile = await profileService.updateProfile(userId, updateData, file);
     res.json(updatedProfile);
