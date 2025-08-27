@@ -18,6 +18,6 @@ export const updateProfile = async (req, res, next) => {
     const updatedProfile = await profileService.updateProfile(userId, updateData, file);
     res.json(updatedProfile);
   } catch (error) {
-    next(error);
+    next(error.message);
   }
 };
