@@ -4,19 +4,19 @@ import Materials from "../models/Materials.js";
 
 export const createItem = async (data, userId) => {
 const { category, material, ...rest } = data;
-
+console.log(data,"from 7 line")
     // Convert category names to ObjectIds
     const categoryDocs = await Category.find({ name: { $in: category } });
     const materialDocs = await Materials.find({ name: { $in: material } });
 
-    const Item = new Item({
+    const item = new Item({
       ...rest,
       category: categoryDocs.map(c => c._id),
       material: materialDocs.map(m => m._id)
     });
 
 
-
+console.log(item)
 
   // const item = new Item({ ...data, user: userId });
   return await Item.save();
