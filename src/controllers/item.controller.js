@@ -8,7 +8,8 @@ export const createItem = async (req, res, next) => {
     const data=req.body;
     console.log(data,"from 9th")
     if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
-    const item = await itemService.createItem(data, req.headers.user_id);
+    data.user= req.headers.user_id;
+    const item = await itemService.createItem(data);
     res.status(201).json(item);
   } catch (err) {
     next(err);

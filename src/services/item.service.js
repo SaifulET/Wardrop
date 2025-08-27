@@ -2,7 +2,7 @@ import Category from "../models/category.js";
 import Item from "../models/Item.js";
 import Materials from "../models/Materials.js";
 
-export const createItem = async (data, userId) => {
+export const createItem = async (data) => {
 const { category, material, ...rest } = data;
 console.log(data,"from 7 line")
     // Convert category names to ObjectIds
