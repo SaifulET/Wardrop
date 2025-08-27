@@ -1,7 +1,6 @@
 import Category from "../models/category.js";
 import Item from "../models/Item.js";
 import Materials from "../models/Materials.js";
-import Category from "../models/category.js";
 
 export const createItem = async (data, userId) => {
 const { category, material, ...rest } = data;

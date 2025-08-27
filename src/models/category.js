@@ -7,4 +7,4 @@ const CategorySchema = new Schema({
   items: { type: Schema.Types.ObjectId, ref: "Item" }
 }, { timestamps: true });
 
-export default model("categories", CategorySchema);
+export default model("category", CategorySchema);
