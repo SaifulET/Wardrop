@@ -9,9 +9,9 @@ export const getUserProfile = async (userId) => {
   if (!user) throw new Error("User not found");
   return user;
 };
-export const updateProfile = async (userId, jsonData,file) => {
+export const updateProfile = async (userId, updateData,file) => {
 try {
-   const  updateData= JSON.parse(jsonData);
+  //  const  updateData= JSON.parse(Data);
    
   const user = await User.findById(userId)
 
