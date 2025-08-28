@@ -91,7 +91,7 @@ export const forgotPassword = async (email) => {
   await user.save();
 
   // Send OTP to email
-  await SendEmail(email, "Password Reset OTP", `Your OTP is ${otp}`);
+  await SendEmail(email, `Password Reset OTP ${otp}`, `Your OTP is ${otp}`);
   
   return { message: "OTP sent to email" };
 };
@@ -141,7 +141,8 @@ export const googleLogin = async (idToken) => {
 export const updateAdminProfile = async (userId, jsonData,file) => {
   try {
  
-   const  updateData= JSON.parse(jsonData);
+  //  const  updateData= JSON.parse(jsonData);
+   const  updateData= jsonData
    
   const user = await Admin.findById(userId)
 

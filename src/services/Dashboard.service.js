@@ -87,51 +87,89 @@ export const getReportsIdsOnly = async () => {
 
 export const getUserActivityStats = async (period = "monthly") => {
   let dateFormat;
+  let unit;
 
   switch (period) {
     case "weekly":
-      dateFormat = { year: { $year: "$loginHistory.loginAt" }, week: { $isoWeek: "$loginHistory.loginAt" } };
+      unit = "week";
+      dateFormat = {
+        year: { $isoWeekYear: "$date" },
+        week: { $isoWeek: "$date" }
+      };
       break;
     case "monthly":
-      dateFormat = { year: { $year: "$loginHistory.loginAt" }, month: { $month: "$loginHistory.loginAt" } };
+      unit = "month";
+      dateFormat = {
+        year: { $year: "$date" },
+        month: { $month: "$date" }
+      };
       break;
     case "yearly":
-      dateFormat = { year: { $year: "$loginHistory.loginAt" } };
+      unit = "year";
+      dateFormat = { year: { $year: "$date" } };
       break;
     default:
-      dateFormat = { year: { $year: "$loginHistory.loginAt" }, month: { $month: "$loginHistory.loginAt" } };
+      unit = "month";
+      dateFormat = {
+        year: { $year: "$date" },
+        month: { $month: "$date" }
+      };
   }
 
-  // Aggregate
   const result = await User.aggregate([
+    // Flatten login history
     { $unwind: "$loginHistory" },
+
+    // Add fields for firstLoginPeriod & loginPeriod
+    {
+      $addFields: {
+        firstLoginPeriod: {
+          $dateTrunc: { date: "$firstLogin", unit: unit }
+        },
+        loginPeriod: {
+          $dateTrunc: { date: "$loginHistory.loginAt", unit: unit }
+        }
+      }
+    },
+
     {
       $facet: {
+        // ✅ NEW USERS: count based on firstLogin only
         newUsers: [
-          { $match: { $expr: { $eq: ["$loginHistory.loginAt", "$firstLogin"] } } }, // first login during period
-          { $group: { _id: dateFormat, count: { $sum: 1 } } },
-          { $sort: { "_id.year": 1, "_id.month": 1, "_id.week": 1 } }
+          {
+            $group: {
+              _id: "$firstLoginPeriod",
+              users: { $addToSet: "$_id" }
+            }
+          },
+          { $project: { _id: 1, count: { $size: "$users" } } },
+          { $sort: { _id: 1 } }
         ],
+
+        // ✅ OLD USERS: logins after firstLogin
         oldUsers: [
-          { $match: { $expr: { $gt: ["$loginHistory.loginAt", "$firstLogin"] } } }, // subsequent login
-          { $group: { _id: dateFormat, count: { $sum: 1 } } },
-          { $sort: { "_id.year": 1, "_id.month": 1, "_id.week": 1 } }
+          {
+            $match: { $expr: { $gt: ["$loginPeriod", "$firstLoginPeriod"] } }
+          },
+          {
+            $group: {
+              _id: "$loginPeriod",
+              users: { $addToSet: "$_id" }
+            }
+          },
+          { $project: { _id: 1, count: { $size: "$users" } } },
+          { $sort: { _id: 1 } }
         ]
       }
     }
   ]);
 
-  const newUsersData = result[0].newUsers || [];
-  const oldUsersData = result[0].oldUsers || [];
-
-  const newUsersTotal = newUsersData.reduce((acc, val) => acc + val.count, 0);
-  const oldUsersTotal = oldUsersData.reduce((acc, val) => acc + val.count, 0);
-
   return {
-    newUsers: { data: newUsersData, total: newUsersTotal },
-    oldUsers: { data: oldUsersData, total: oldUsersTotal }
+    newUsers: result[0].newUsers,
+    oldUsers: result[0].oldUsers
   };
 };
+
 
 
 
