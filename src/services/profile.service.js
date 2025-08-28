@@ -12,9 +12,9 @@ export const getUserProfile = async (userId) => {
 export const updateProfile = async (userId, updateData,file) => {
 try {
   //  const  updateData= JSON.parse(Data);
-   console.log(updateData,"from service")
+  //  console.log(updateData,"from service")
   const user = await User.findById(userId)
-
+// console.log(user)
   if (!user) {
     throw new Error("User not found");
   }
@@ -22,9 +22,9 @@ try {
 
   // If image is provided
 
-  if (file) {
+  if (req.file) {
     // Local storage example
-    const imagePath = `/uploads/profile/${file.originalname}`;
+    const imagePath = `/uploads/profile/${req.file.originalname}`;
   console.log(imagePath)
     user.profileImage = imagePath;
   }
@@ -35,6 +35,7 @@ try {
   if(updateData.gender)user.gender=updateData.gender;
   if (updateData.bio) user.bio = updateData.bio;
   if (updateData.phone)user.phone = updateData.phone;
+  if(updateData.language)user.language= updateData.language
   await user.save();
   return user;
   

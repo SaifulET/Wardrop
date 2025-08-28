@@ -9,6 +9,11 @@ phone:{type:String, unique:true, sparse:true},
   otp: { type: String },
   otpExpires: { type: Date },
   gender: { type: String, enum: ["male", "female", "other"] },
+  language: { 
+  type: String, 
+  enum: ["English", "Russian"], 
+  default: "English" 
+},
   profileImage: { type: String },
   dob: { type: Date },
   bio: { type: String },
@@ -22,7 +27,7 @@ phone:{type:String, unique:true, sparse:true},
     outfits: { type: String, enum: ["everyone", "only_me", "followers"], default: "everyone" },
     lookbooks: { type: String, enum: ["everyone", "only_me", "followers"], default: "everyone" }
   },
-  language: { type: String, default: "en" },
+  // language: { type: String, default: "en" },
   
   notificationsEnabled: { type: Boolean, default: true },
   disabled: { type: Boolean, default: false },

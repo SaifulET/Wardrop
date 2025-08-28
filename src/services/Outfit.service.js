@@ -8,7 +8,7 @@ import { createNotification } from "./Notification.service.js";
 export const createOutfit = async (userId, data) => {
   const { title, image, season, style } = data;
 
-    const styles = await Style.find({ name: { $in: data.style } }, "_id");
+    const styles = await Style.find({ name: { $in: style } }, "_id");
     
   
   const  styleIds = styles.map(s => s._id);
