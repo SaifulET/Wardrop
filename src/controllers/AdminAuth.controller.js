@@ -1,13 +1,19 @@
 import * as authService from "../services/AdminAuth.service.js";
-import { emailSchema } from "../utils/Validation.js";
+import {  userschema } from "../utils/Validation.js";
 
 // Signup
 export const signup = async (req, res) => {
   try {
-const result = emailSchema.safeParse(req.body.email); // ❌ invalid
-if (!result.success) {
-  return res.json({error:result.error.errors[0].message}); // 👉 "Invalid email address"
-}
+const result = userschema.safeParse({email:req.body.email , password: req.body.password});
+  if (!result.success) {
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
 
 
     const user = await authService.signup(req.body);
@@ -20,6 +26,19 @@ if (!result.success) {
 // Signin
 export const signin = async (req, res) => {
   try {
+
+const result = userschema.safeParse({email:req.body.email , password: req.body.password});
+  if (!result.success) {
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
+
+
     const { email, password } = req.body;
     const { gmail, token } = await authService.signin(email, password);
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
@@ -52,10 +71,31 @@ export const forgotPassword = async (req, res) => {
 };
 
 // Reset Password
-export const resetPassword = async (req, res) => {
+export const VerifyAdminEmail = async (req, res) => {
   try {
-    const { email, otp, newPassword } = req.body;
-    const data = await authService.resetPassword(email, otp, newPassword);
+    const { email, otp} = req.body;
+    const data = await authService.AdminOtpVerify(email, otp);
+    res.status(200).json({ success: true, message: data.message });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const resetAdminPasswordController = async (req, res) => {
+  try {
+    const result = userschema.safeParse({email:req.body.email, password:req.body.password});
+  if (!result.success) {
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
+
+    const { email, password, confirmPassword } = req.body;
+    const data = await authService.resetAdminPassword(email,  password,confirmPassword,);
     res.status(200).json({ success: true, message: data.message });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

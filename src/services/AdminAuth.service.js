@@ -97,17 +97,17 @@ export const forgotPassword = async (email) => {
 };
 
 // Reset Password → Verify OTP & Update
-export const resetPassword = async (email, otp, newPassword) => {
+export const AdminOtpVerify = async (email, otp) => {
   const user = await Admin.findOne({ email });
   if (!user) throw new Error("User not found");
   if (user.otp !== otp || Date.now() > user.otpExpires) throw new Error("Invalid or expired OTP");
 
-  user.password = newPassword;
+
   user.otp = undefined;
   user.otpExpires = undefined;
   await user.save();
 
-  return { message: "Password reset successfully" };
+  return { message: "Otp has successfully Verified" };
 };
 
 // Google Login
@@ -177,4 +177,34 @@ export const getAdminProfile = async (userId) => {
   const user = await Admin.findById(userId).select("-password");
   if (!user) throw new Error("User not found");
   return user;
+};
+
+
+export const resetAdminPassword = async (email, password, confirmPassword ) => {
+  console.log(password)
+   if(password !==confirmPassword){
+    throw new Error("Password and confirmPassword isn't same");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  try {
+    const user = new Admin({ 
+      email, 
+      password: hashedPassword 
+    });
+    
+      
+  
+  await user.save();
+
+    return {user};
+  } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      console.log(error)
+      throw new Error('Error');
+    }
+    throw error;
+  }
 };

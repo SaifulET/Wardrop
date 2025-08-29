@@ -1,19 +1,22 @@
 import * as authService from "../services/auth.service.js";
-import { emailSchema } from "../utils/Validation.js";
+import {  Emailschema, userschema } from "../utils/Validation.js";
 
 
 // Signup
 export const signup = async (req, res) => {
   try {
-  const result = emailSchema.safeParse(req.body.email); // ❌ invalid
-  console.log(result.success)
+   const result = userschema.safeParse({email:req.body.email , password: req.body.password});
   if (!result.success) {
-    console.log("dk")
-    return res.json({error:result.error.errors[0].message}); // 👉 "Invalid email address"
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
   }
-  
-    const {user,token} = await authService.signup(req.body);
-     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
+    const { user, token } = await authService.signup(req.body);
+    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "Strict" });
     res.status(201).json({ success: true, data: user });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -23,6 +26,18 @@ export const signup = async (req, res) => {
 // Signin
 export const signin = async (req, res) => {
   try {
+  const result = userschema.safeParse(req.body);
+  if (!result.success) {
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
+
+
     const { email, password } = req.body;
     const { user, token } = await authService.signin(email, password);
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
@@ -55,6 +70,17 @@ export const forgotPassword = async (req, res) => {
 
 export const verifyOtpController = async (req, res) => {
   try {
+    const results = Emailschema.safeParse({email:req.body.email });
+  if (!results.success) {
+    // Extract only messages you defined in the schema
+    const messages = results.error.issues.map(err => err.message);
+
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
+    
     const { email, otp } = req.body;
     const result = await authService.verifyOtpService(email, otp);
     res.status(200).json(result);
@@ -67,9 +93,19 @@ export const verifyOtpController = async (req, res) => {
 // Reset Password
 export const resetPassword = async (req, res) => {
   try {
+    const result = userschema.safeParse({email:req.body.email, password:req.body.password});
+  if (!result.success) {
+    // Extract only messages you defined in the schema
+    const messages = result.error.issues.map(err => err.message);
 
-    const { email, newPassword, confirmPassword } = req.body;
-    const data = await authService.resetPassword(email,  newPassword,confirmPassword,);
+    return res.status(400).json({
+      success: false,
+      message: messages,   // 👈 only your custom messages
+    });
+  }
+
+    const { email, password, confirmPassword } = req.body;
+    const data = await authService.resetPassword(email,  password,confirmPassword,);
     res.status(200).json({ success: true, message: data.message });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
