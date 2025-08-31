@@ -202,6 +202,7 @@ export const resetAdminPassword = async (email, password, confirmPassword ) => {
   } catch (error) {
     if (error.code === 11000) {
       // Handle duplicate key error
+      console.log("fslkldk")
       console.log(error)
       throw new Error('Error');
     }

@@ -3,8 +3,15 @@ import Outfit from "../models/Outfit.js";
 
 // Create Style (Admin only)
 export const createCategoryService = async (categoryData, adminId) => {
-  const Category = await category.create({ ...categoryData, createdBy: adminId });
+  const ctg= await category.find({name:categoryData.name})
+  console.log(ctg)
+  
+  if(ctg.length<1)
+  {
+    const Category = await category.create({ ...categoryData, createdBy: adminId });
   return Category;
+  }
+  return "Category already exist"
 };
 
 // Edit Style (Admin only)

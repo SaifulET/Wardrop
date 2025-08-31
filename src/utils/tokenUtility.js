@@ -8,6 +8,7 @@ export const TokenEncode=(email,user_id)=>{
 }
 export const TokenDecode=(token)=>{
     try{
+        console.log(token ,"from decode")
         const KEY=JWT_KEY;
         return jwt.verify(token,KEY)
     }
