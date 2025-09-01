@@ -24,27 +24,39 @@ const result = userschema.safeParse({email:req.body.email , password: req.body.p
 };
 
 // Signin
+// Signin
 export const signin = async (req, res) => {
+  console.log(`req.body`, req.body);
   try {
-
-const result = userschema.safeParse({email:req.body.email , password: req.body.password});
-  if (!result.success) {
-    // Extract only messages you defined in the schema
-    const messages = result.error.issues.map(err => err.message);
-
-    return res.status(400).json({
-      success: false,
-      message: messages,   // 👈 only your custom messages
+    const result = userschema.safeParse({
+      email: req.body.email,
+      password: req.body.password,
     });
-  }
+    console.log(`result `, result);
 
+    if (!result.success) {
+      // Extract only messages you defined in the schema
+      const messages = result.error.issues.map((err) => err.message);
 
+      return res.status(400).json({
+        success: false,
+        message: messages, // 👈 only your custom messages
+      });
+    }
+    // let token="dummytoken";
     const { email, password } = req.body;
+    console.log(`email`, email, "password", password);
     const { gmail, token } = await authService.signin(email, password);
-    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
-    res.status(200).json({ success: true, email: gmail , token});
+    // console.log(`gmail`, gmail,  "token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+    });
+
+    res.status(200).json({ success: true, email: gmail, token });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
