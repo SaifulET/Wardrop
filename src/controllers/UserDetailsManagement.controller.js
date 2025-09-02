@@ -1,4 +1,4 @@
-import { getAllUsersService,getUserStatsService } from "../services/UserDetailsManagement.service.js";
+import { getAllUsersService,getUserById,getUserStatsService } from "../services/UserDetailsManagement.service.js";
 
 export const getAllUsersController = async (req, res) => {
   try {
@@ -16,6 +16,24 @@ export const getAllUsersController = async (req, res) => {
   }
 };
 
+
+export const getUserByIdController = async (req, res) => {
+  try {
+    const { id } = req.params; // Get user ID from route params
+    const user = await getUserById(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: user,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 
