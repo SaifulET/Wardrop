@@ -6,46 +6,13 @@ import {
   deleteOutfit,
 } from "../services/Outfit.service.js";
 
-// ➕ Create Outfit
-// export const createOutfitController = async (req, res) => {
-//   try {
-//     const userId = req.headers.user_id;
-  
-//     //  const {title,season,style} = JSON.parse(req.body.data);
-//      const {title,season,style} = req.body
-    
-//     // file comes from multer
-//     const imagePath = req.file ? req.file.path : null;
-//     if (!imagePath) return res.status(400).json({ error: "Image is required" });
-
-//     const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
-//     res.status(201).json(outfit);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// };
+➕ Create Outfit
 export const createOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
-  console.log("12")
-  let jsonString = req.body.text;
-
-// Remove surrounding quotes (single or double)
-jsonString = jsonString.trim();
-if (
-  (jsonString.startsWith("'") && jsonString.endsWith("'")) ||
-  (jsonString.startsWith('"') && jsonString.endsWith('"'))
-) {
-  jsonString = jsonString.slice(1, -1);
-}
-
-// Optional: unescape quotes inside
-jsonString = jsonString.replace(/\\"/g, '"').replace(/\\'/g, "'");
-console.log(JSON.parse(jsonString))
-     const {title,season,style} = JSON.parse(req.body.text);
-     console.log("line15")
-     console.log(title,season,style)
-    //  const {title,season,style} = req.body
+  
+    //  const {title,season,style} = JSON.parse(req.body.data);
+     const {title,season,style} = req.body
     
     // file comes from multer
     const imagePath = req.file ? req.file.path : null;
@@ -57,6 +24,39 @@ console.log(JSON.parse(jsonString))
     res.status(400).json({ error: err.message });
   }
 };
+// export const createOutfitController = async (req, res) => {
+//   try {
+//     const userId = req.headers.user_id;
+//   console.log("12")
+//   let jsonString = req.body.text;
+
+// // Remove surrounding quotes (single or double)
+// jsonString = jsonString.trim();
+// if (
+//   (jsonString.startsWith("'") && jsonString.endsWith("'")) ||
+//   (jsonString.startsWith('"') && jsonString.endsWith('"'))
+// ) {
+//   jsonString = jsonString.slice(1, -1);
+// }
+
+// // Optional: unescape quotes inside
+// jsonString = jsonString.replace(/\\"/g, '"').replace(/\\'/g, "'");
+// console.log(JSON.parse(jsonString))
+//      const {title,season,style} = JSON.parse(req.body.text);
+//      console.log("line15")
+//      console.log(title,season,style)
+//     //  const {title,season,style} = req.body
+    
+//     // file comes from multer
+//     const imagePath = req.file ? req.file.path : null;
+//     if (!imagePath) return res.status(400).json({ error: "Image is required" });
+
+//     const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
+//     res.status(201).json(outfit);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
 
 // ✏️ Update Outfit
 export const updateOutfitController = async (req, res) => {
