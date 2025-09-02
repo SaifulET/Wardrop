@@ -13,9 +13,11 @@ export const updateProfile = async (req, res, next) => {
   try {
     const userId = req.headers.user_id;
 
-    const updateData = req.body; // Assuming the update data is in the request body
+    const updateData = req.body; 
+    console.log(updateData)
+    // Assuming the update data is in the request body
     if(req.file){
-        const updatedProfile = await profileService.updateProfile(userId, req.body.data,req.file);
+        const updatedProfile = await profileService.updateProfile(userId, req.body,req.file);
       res.json(updatedProfile);
     }
     
