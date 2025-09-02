@@ -15,7 +15,7 @@ phone:{type:String, unique:true, sparse:true},
   default: "English" 
 },
   profileImage: { type: String },
-  dob: { type: Date },
+  dob: { type: String },
   bio: { type: String },
   location: { type: String },
   followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
