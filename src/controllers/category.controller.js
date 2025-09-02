@@ -53,11 +53,11 @@ export const deleteCategoryController = async (req, res) => {
   }
 };
 
-// Get All Styles (Users + Admin)
+// Get All categories (Users + Admin)
 export const getAllCategoryController = async (req, res) => {
   try {
-    const styles = await getAllCategoryService();
-    res.status(200).json({ success: true, styles });
+    const categories = await getAllCategoryService();
+    res.status(200).json({ success: true, categories });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
