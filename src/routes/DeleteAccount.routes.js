@@ -4,7 +4,7 @@ import { authCheck} from "../middlewares/auth.middleware.js";
 
 const DeleteAccount = express.Router();
 
-DeleteAccount.delete("/delete", authCheck, deleteAccountController);
+DeleteAccount.delete("/delete/:id", authCheck, deleteAccountController);
 DeleteAccount.get("/deleteRequest", authCheck, requestForAccountDelete);
 DeleteAccount.get("/AllAccount", authCheck, AllDeleteAccountListController);
 
