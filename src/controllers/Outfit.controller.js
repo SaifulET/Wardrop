@@ -15,7 +15,8 @@ export const createOutfitController = async (req, res) => {
      const {title,season,style} = req.body
     
     // file comes from multer
-    const imagePath = req.file ? req.file.path : null;
+    // const imagePath = req.file ? req.file.path : null;
+if (req.file) imagePath = `/uploads/outfits/${req.file.originalname}`;
     if (!imagePath) return res.status(400).json({ error: "Image is required" });
 
     const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
