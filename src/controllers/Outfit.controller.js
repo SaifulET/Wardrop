@@ -6,7 +6,7 @@ import {
   deleteOutfit,
 } from "../services/Outfit.service.js";
 
-➕ Create Outfit
+// ➕ Create Outfit
 export const createOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
