@@ -54,7 +54,7 @@ const now = new Date();
   // Add new login entry to loginHistory
 
   // user.loginHistory.push({ loginAt: now });
-  
+
   await user.save();
   await createAdminNotification({
       userId: user._id,
@@ -100,7 +100,7 @@ const now = new Date();
   }
 
   // Add new login entry to loginHistory
-  user.loginHistory.push({ loginAt: now });
+  // user.loginHistory.push({ loginAt: now });
   await user.save();
 
 
