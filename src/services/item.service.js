@@ -112,3 +112,17 @@ export const deleteItem = async (id) => {
      await Item.findByIdAndDelete({ _id: id });
     return "user has been deleted successfully";
 };
+
+
+
+
+
+export const getBrandsByUser = async (userId) => {
+  try {
+    // using distinct to get unique brand values for that user
+    const brands = await Item.distinct("brand", { user: userId });
+    return brands;
+  } catch (error) {
+    throw new Error("Failed to fetch brands: " + error.message);
+  }
+};
