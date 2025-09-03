@@ -11,6 +11,7 @@ export const followUserController = async (req, res) => {
     }
 
     const result = await followUser(userId, targetUserId);
+    console.log(result)
     res.status(200).json(result);
 
   } catch (error) {

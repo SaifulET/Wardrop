@@ -23,7 +23,8 @@ console.log(item)
 };
 
 export const getItems = async (filters,id) => {
-  const query = {};
+  if(filters){
+    const query = {};
   query.user= id;
 
 // Title search (case-insensitive)
@@ -61,7 +62,13 @@ if (filters.season)
 if (filters.style)
   query.style = { $in: filters.style.split(",").map((s) => s.trim()) };
   const item= await Item.find(query);
+  
     return item;
+  }
+  else{
+    const item = await Item.findById({user:id})
+    return item
+  }
 };
 
 export const getItemById = async (id,user) => {
