@@ -62,7 +62,7 @@ export const getAllReportsService = async () => {
       populate: { path: "post", select: "title image user", populate: { path: "user", select: "username email profileImage" } }
     }) // if type post
     .sort({ createdAt: -1 })
-    .select("reportType reason targetUser targetCommunity reporter createdAt");  
+    .select("reportType reason targetUser targetCommunity reporter status createdAt");  
 
   return reports;
 };
