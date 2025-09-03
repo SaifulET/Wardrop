@@ -36,6 +36,9 @@ try {
   if (updateData.bio) user.bio = updateData.bio;
   if (updateData.phone)user.phone = updateData.phone;
   if(updateData.language)user.language= updateData.language
+  if(updateData.dob)user.dob= updateData.dob
+  if(updateData.location)user.location= updateData.location
+  
   await user.save();
   return user;
   

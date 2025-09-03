@@ -19,8 +19,11 @@ export const getAllUsersController = async (req, res) => {
 
 export const getUserByIdController = async (req, res) => {
   try {
-    const { id } = req.params; // Get user ID from route params
+    const { id } = req.params; 
+    console.log(id,"kd")
+    // Get user ID from route params
     const user = await getUserById(id);
+    console.log(user)
 
     res.status(200).json({
       success: true,

@@ -18,7 +18,9 @@ export const getAllUsersService = async () => {
 
 export const getUserById = async (userId) => {
   try {
+    console.log(userId,"dls")
     const user = await User.findById(userId).select("-password");
+    console.log("user",user)
     if (!user) {
       throw new Error("User not found");
     }
