@@ -52,3 +52,16 @@ export const getUserStatsService = async (userId) => {
     followingCount: user?.following?.length || 0,
   };
 };
+
+
+export const toggleUserStatusService = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  // Toggle between "false" and "true"
+  user.disabled = user.disabled === false ? true : false;
+  await user.save();
+
+
+  return user;
+};

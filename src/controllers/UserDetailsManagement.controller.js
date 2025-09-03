@@ -1,4 +1,4 @@
-import { getAllUsersService,getUserById,getUserStatsService } from "../services/UserDetailsManagement.service.js";
+import { getAllUsersService,getUserById,getUserStatsService, toggleUserStatusService } from "../services/UserDetailsManagement.service.js";
 
 export const getAllUsersController = async (req, res) => {
   try {
@@ -37,6 +37,18 @@ export const getUserByIdController = async (req, res) => {
     });
   }
 };
+
+
+export const ToggleUserStatus=async(req,res)=>{
+    try {
+      const { userId } = req.body;
+      const updatedUserStatus = await toggleUserStatusService(userId);
+      res.status(200).json({ success: true, report: updatedUserStatus });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
+
 
 
 
