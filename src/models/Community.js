@@ -8,7 +8,7 @@ const CommunitySchema = new mongoose.Schema({
   reactions: [
     {
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-      type: { type: String, enum: ["like","love","haha","wow","sad","angry"] },
+      type: { type: String },
       reactedAt: { type: Date, default: Date.now }
     }
   ],

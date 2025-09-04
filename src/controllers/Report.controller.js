@@ -3,6 +3,7 @@ import { createReportService, deleteReportByIdService, getAllReportsService, sea
 export const createReportController = async (req, res) => {
   try {
     const {   reason, reportType } = req.body;
+    console.log(req.body)
     const reporterId = req.headers.user_id;
     
     if(reportType==="post"){
