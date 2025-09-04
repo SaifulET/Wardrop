@@ -2,15 +2,17 @@ import { createReportService, deleteReportByIdService, getAllReportsService, sea
 
 export const createReportController = async (req, res) => {
   try {
+    console.log(req.body,"ghg")
     const {   reason, reportType } = req.body;
-    console.log(req.body)
+    console.log(req.body,"kd")
     const reporterId = req.headers.user_id;
-    
+    const temp= null;
     if(reportType==="post"){
-      const {targetCommunityId} = req.body
+      const {targetCommunity} = req.body
       const report = await createReportService({
       reporterId,
-      targetCommunityId,
+      temp,
+      targetCommunity,
       reason,
       reportType,
     });
@@ -18,11 +20,14 @@ export const createReportController = async (req, res) => {
       
     }
     else{
-       const {targetUserId} = req.body
+
+       const targetUserId = req.body.targetUser
+      //  console.log(targetUser)
         const report = await createReportService({
       reporterId,
+
       targetUserId,
-      
+      temp,
       reason,
       reportType,
     });

@@ -4,7 +4,8 @@ import Outfit from "../models/Outfit.js";
 import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
-export const createReportService = async ({ reporterId, targetUserId=null, targetCommunityId=null, reason, reportType }) => {
+export const createReportService = async ({ reporterId, targetUserId, targetCommunityId, reason, reportType }) => {
+  console.log(reporterId,targetUserId,targetCommunityId,reason,reportType)
 
   if (!["profile", "post"].includes(reportType)) {
     throw new Error("Invalid report type");
