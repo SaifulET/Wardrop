@@ -1,34 +1,34 @@
 import User from "../models/User.js";
 
 // Block user
-export const blockUser = async (userId, targetUserId) => {
-  if (userId === targetUserId) throw new Error("You cannot block yourself");
+// export const blockUser = async (userId, targetUserId) => {
+//   if (userId === targetUserId) throw new Error("You cannot block yourself");
 
-  const user = await User.findById(userId);
-  const targetUser = await User.findById(targetUserId);
+//   const user = await User.findById(userId);
+//   const targetUser = await User.findById(targetUserId);
 
-  if (!user || !targetUser) throw new Error("User not found");
+//   if (!user || !targetUser) throw new Error("User not found");
 
-  // If already blocked
-  if (user.blockedUsers.includes(targetUserId)) {
-    throw new Error("User already blocked");
-  }
+//   // If already blocked
+//   if (user.blockedUsers.includes(targetUserId)) {
+//     throw new Error("User already blocked");
+//   }
 
-  // Add to blockedUsers
-  user.blockedUsers.push(targetUserId);
+//   // Add to blockedUsers
+//   user.blockedUsers.push(targetUserId);
 
-  // Remove from following/followers if exists
-  user.following = user.following.filter(f => f.toString() !== targetUserId.toString());
-  user.followers = user.followers.filter(f => f.toString() !== targetUserId.toString());
+//   // Remove from following/followers if exists
+//   user.following = user.following.filter(f => f.toString() !== targetUserId.toString());
+//   user.followers = user.followers.filter(f => f.toString() !== targetUserId.toString());
 
-  targetUser.following = targetUser.following.filter(f => f.toString() !== userId.toString());
-  targetUser.followers = targetUser.followers.filter(f => f.toString() !== userId.toString());
+//   targetUser.following = targetUser.following.filter(f => f.toString() !== userId.toString());
+//   targetUser.followers = targetUser.followers.filter(f => f.toString() !== userId.toString());
 
-  await user.save();
-  await targetUser.save();
+//   await user.save();
+//   await targetUser.save();
 
-  return { message: "User blocked successfully", user };
-};
+//   return { message: "User blocked successfully", user };
+// };
 
 // Unblock user
 export const unblockUser = async (userId, targetUserId) => {
@@ -56,4 +56,36 @@ export const getBlockedUsers = async (userId) => {
   if (!user) throw new Error("User not found");
 
   return user.blockedUsers;
+};
+
+
+
+export const blockUser = async (userId, targetUserId) => {
+  if (userId === targetUserId) throw new Error("You cannot block yourself");
+
+  const user = await User.findById(userId);
+
+  if (!user) throw new Error("User not found");
+
+  const isblockedUsers= user.blockedUsers.includes(targetUserId);
+
+  if (isblockedUsers) {
+    // Unfollow
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { blockedUsers: targetUserId } },
+      { new: true }
+    );
+
+    return { message: "UnBlock successfully" };
+  } else {
+    // Follow
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { blockedUsers: targetUserId } },
+      { new: true }
+    );
+
+    return { message: "Blocked successfully" };
+  }
 };
