@@ -52,7 +52,9 @@ const now = new Date();
   }
 
   // Add new login entry to loginHistory
-  user.loginHistory.push({ loginAt: now });
+
+  // user.loginHistory.push({ loginAt: now });
+
   await user.save();
   await createAdminNotification({
       userId: user._id,
@@ -76,7 +78,7 @@ export const signin = async (email, password) => {
   
   if (!user) throw new Error("User not found");
   if (user.disabled) throw new Error("Account has banned!");
-  if(user.active) throw new Error("Already LogedIn");
+  // if(user.active) throw new Error("Already LogedIn");
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid password");
@@ -98,7 +100,7 @@ const now = new Date();
   }
 
   // Add new login entry to loginHistory
-  user.loginHistory.push({ loginAt: now });
+  // user.loginHistory.push({ loginAt: now });
   await user.save();
 
 

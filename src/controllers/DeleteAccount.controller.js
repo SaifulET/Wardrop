@@ -2,8 +2,8 @@ import { AllDeleteAccountList, deleteAccountService, requestDeleteAccount } from
 
 export const deleteAccountController = async (req, res) => {
   try {
-    const userId = req.headers.user_id; // assuming user is authenticated and userId is in req.user
-
+    const userId = req.params.id; // assuming user is authenticated and userId is in req.user
+console.log(userId)
     const deletedUser = await deleteAccountService(userId);
 
     res.status(200).json({

@@ -11,7 +11,7 @@ export const getAllPostsService = async () => {
   const CommunityPost = await Community.find({
     post: { $in: posts.map(p => p._id) }
   })
-    .populate("reactions.user", "name profileImage")
+    .populate("reactions.user", "name profileImage _id")
     .lean();
 
   // 3. Merge posts with community data
@@ -20,6 +20,7 @@ export const getAllPostsService = async () => {
 
     return {
       community:CommunityPost._id,
+      userId:post.user ? post.user._id : null,
       postId: post._id,
       postImage: post.image,
       title: post.title,

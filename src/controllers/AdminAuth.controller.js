@@ -52,8 +52,13 @@ export const signin = async (req, res) => {
     // console.log(`gmail`, gmail,  "token", token);
     res.cookie("token", token, {
       httpOnly: true,
+<<<<<<< HEAD
       secure: false,
       sameSite: "Lax",
+=======
+      secure: true,
+      sameSite: "None",
+>>>>>>> a28875a6ae4e1b9ed02e718d537e980c621aeaed
     });
 
     res.status(200).json({ success: true, email: gmail, token });

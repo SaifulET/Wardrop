@@ -1,14 +1,18 @@
 import Category from "../models/category.js";
 import Item from "../models/Item.js";
 import Materials from "../models/Materials.js";
+import mongoose from "mongoose";
+
 
 export const createItem = async (data) => {
 const { category, material, ...rest } = data;
 console.log(data,"from 7 line")
     // Convert category names to ObjectIds
+
     const categoryDocs = await Category.find({ name: { $in: category } });
     const materialDocs = await Materials.find({ name: { $in: material } });
 
+console.log(categoryDocs,"kk")
     const item = new Item({
       ...rest,
       category: categoryDocs.map(c => c._id),
@@ -23,8 +27,11 @@ console.log(item)
 };
 
 export const getItems = async (filters,id) => {
-  const query = {};
+
+  if(filters){
+    const query = {};
   query.user= id;
+  console.log(filters)
 
 // Title search (case-insensitive)
 if (filters.title) query.title = { $regex: filters.title, $options: "i" };
@@ -34,22 +41,61 @@ if (filters.brand)
   query.brand = { $in: filters.brand.split(",").map((b) => b.trim()) };
 
 // Multiple categories (optional)
-if (filters.category){
-
 if (filters.category) {
+  const categories = filters.category.split(",").map((c) => c.trim());
 
-    const cat= await Category.findOne({ items: id, category: filters.category,user:user });
-    if (cat) {
-      query.category = cat._id.toString();
-    }}
+  const regexConditions = categories.map((c) => ({
+    name: { $regex: c, $options: "i" }, // partial + case-insensitive
+  }));
 
-
-  query.category = { $in: filters.category.split(",").map((c) => c.trim()) };
-
-}
+  const catDocs = await Category.find({
+    $or: regexConditions,
+  });
   
-if (filters.material)
-  query.material = { $in: filters.material.split(",").map((c) => c.trim()) };
+
+
+
+  // Extract IDs
+  const categoryIds = catDocs.map((c) => c._id.toString());
+  console.log("categoryIds:", categoryIds);
+
+  if (categoryIds.length > 0) {
+    query.category = { $in: categoryIds };
+  } else {
+    query.category = { $in: [] }; // no match
+  }
+}
+if (filters.material) {
+  const metarials = filters.material.split(",").map((c) => c.trim());
+
+  const regexConditions = metarials.map((c) => ({
+    name: { $regex: c, $options: "i" }, // partial + case-insensitive
+  }));
+
+  const catDocs = await Materials.find({
+    $or: regexConditions,
+  });
+  
+
+
+
+  // Extract IDs
+  const metarialIds = catDocs.map((c) => c._id.toString());
+  // console.log("categoryIds:", metarialIds);
+
+  if (metarialIds.length > 0) {
+    query.material = { $in: metarialIds };
+  } else {
+    query.material = { $in: [] }; // no match
+  }
+}
+
+
+
+
+  
+// if (filters.material)
+//   query.material = { $in: filters.material.split(",").map((c) => c.trim()) };
 
 // Colors, season, style
 if (filters.colors)
@@ -61,7 +107,13 @@ if (filters.season)
 if (filters.style)
   query.style = { $in: filters.style.split(",").map((s) => s.trim()) };
   const item= await Item.find(query);
+  
     return item;
+  }
+  else{
+    const item = await Item.findById({user:id})
+    return item
+  }
 };
 
 export const getItemById = async (id,user) => {
@@ -74,17 +126,16 @@ export const getItemById = async (id,user) => {
 export const updateItem = async (id, data,user) =>{
   const query = {}
   query.user = user;
-  if (data.category || data.subCategory || data.subsubCategory) {
+  if (data.category) {
 
-    const cat= await Category.findOne({ items: id, category: data.category,user:user });
+    const cat= await Category.findOne({ items: id, name: data.category,user:user });
     if (cat) {
       query.category = cat._id.toString();
     }
     else {
     const categoryData = {};
-    if (data.category) categoryData.category = data.category;
-    if (data.subCategory) categoryData.subCategory = data.subCategory;
-    if (data.subsubCategory) categoryData.subsubCategory = data.subsubCategory;
+    if (data.category) categoryData.name = data.category;
+    
 
   categoryData.items= id;
   categoryData.user = user;
@@ -104,4 +155,18 @@ export const updateItem = async (id, data,user) =>{
 export const deleteItem = async (id) => {
      await Item.findByIdAndDelete({ _id: id });
     return "user has been deleted successfully";
+};
+
+
+
+
+
+export const getBrandsByUser = async (userId) => {
+  try {
+    // using distinct to get unique brand values for that user
+    const brands = await Item.distinct("brand", { user: userId });
+    return brands;
+  } catch (error) {
+    throw new Error("Failed to fetch brands: " + error.message);
+  }
 };

@@ -59,3 +59,32 @@ export const deleteItem = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+export const getBrandsByUserController = async (req, res) => {
+  try {
+    const userId= req.headers.user_id;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "UserId is required",
+      });
+    }
+
+    const brands = await itemService.getBrandsByUser(userId);
+
+    res.status(200).json({
+      success: true,
+      count: brands.length,
+      message: "Brands fetched successfully",
+      data: brands,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

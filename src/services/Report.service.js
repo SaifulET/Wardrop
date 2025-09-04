@@ -4,7 +4,8 @@ import Outfit from "../models/Outfit.js";
 import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
-export const createReportService = async ({ reporterId, targetUserId=null, targetCommunityId=null, reason, reportType }) => {
+export const createReportService = async ({ reporterId, targetUserId, targetCommunityId, reason, reportType }) => {
+  console.log(reporterId,targetUserId,targetCommunityId,reason,reportType)
 
   if (!["profile", "post"].includes(reportType)) {
     throw new Error("Invalid report type");
@@ -62,7 +63,7 @@ export const getAllReportsService = async () => {
       populate: { path: "post", select: "title image user", populate: { path: "user", select: "username email profileImage" } }
     }) // if type post
     .sort({ createdAt: -1 })
-    .select("reportType reason targetUser targetCommunity reporter createdAt");  
+    .select("reportType reason targetUser targetCommunity reporter status createdAt");  
 
   return reports;
 };

@@ -16,6 +16,23 @@ export const getAllUsersService = async () => {
   }
 };
 
+export const getUserById = async (userId) => {
+  try {
+    console.log(userId,"dls")
+    const user = await User.findById(userId).select("-password");
+    console.log("user",user)
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user;
+  } catch (error) {
+    throw new Error("Failed to fetch user: " + error.message);
+  }
+};
+
+
+
+
 
 
 
@@ -34,4 +51,17 @@ export const getUserStatsService = async (userId) => {
     followersCount: user?.followers?.length || 0,
     followingCount: user?.following?.length || 0,
   };
+};
+
+
+export const toggleUserStatusService = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  // Toggle between "false" and "true"
+  user.disabled = user.disabled === false ? true : false;
+  await user.save();
+
+
+  return user;
 };
