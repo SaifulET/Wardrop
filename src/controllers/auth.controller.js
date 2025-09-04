@@ -40,7 +40,11 @@ export const signin = async (req, res) => {
 
     const { email, password } = req.body;
     const { user, token } = await authService.signin(email, password);
-    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==="production", sameSite: "Strict" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
     res.status(200).json({ success: true, data: user , token});
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

@@ -17,7 +17,7 @@ const upload = multer({ storage }).single("file");
 export const conditionalUpload = (req, res, next) => {
   const contentType = req.headers["content-type"] || "";
 
-  // if (!contentType) return next(); // skip multer if no file
+  if (!contentType) return next(); // skip multer if no file
 
   upload(req, res, (err) => {
     if (err) return next(err);

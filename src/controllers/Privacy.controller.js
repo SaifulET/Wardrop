@@ -20,6 +20,7 @@ export const updatePrivacyController = async (req, res) => {
 export const getPrivacyController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
+    console.log(userId)
     const privacy = await getPrivacyService(userId);
 
     res.status(200).json({ success: true, privacy });

@@ -11,6 +11,7 @@ export const getProfile = async (req, res, next) => {
 
 export const updateProfile = async (req, res, next) => {
   try {
+    console.log("hello")
     const userId = req.headers.user_id;
 
     const updateData = req.body; 

@@ -1,12 +1,20 @@
 import {TokenDecode} from "../utils/tokenUtility.js";
 export const authCheck=async (req,res,next)=>{
-    const authHeader = req.headers.authorization; 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token provided" });
-  }
 
-  const token = authHeader.split(" ")[1];
-    let decoded=TokenDecode(token);
+  // console.log(res.cookies.token)
+  const token= req.cookies.token;
+    const authHeader = req.headers.authorization; 
+
+    console.log(authHeader)
+    console.log(token)
+  // if (!authHeader && !authHeader.startsWith("Bearer ") && !tokens) {
+  //   return res.status(401).json({ message: "No token provided" });
+  // }
+
+
+
+ let decoded=TokenDecode(token);
+  
     if(decoded===null){
         res.status(401).json({status:"fail",Message:"Unauthorized",token:token});
     }
