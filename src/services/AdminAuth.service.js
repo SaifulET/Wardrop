@@ -189,15 +189,17 @@ export const resetAdminPassword = async (email, password, confirmPassword ) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   
   try {
-    const user = new Admin({ 
-      email, 
-      password: hashedPassword 
-    });
+    const user =await Admin.findOneAndUpdate(
+    { email },
+    { $set: { password: hashedPassword } },
+    { new: true }
+  );
     
       
   
-  await user.save();
+  
 
+console.log(user)
     return {user};
   } catch (error) {
     if (error.code === 11000) {
