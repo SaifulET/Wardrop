@@ -39,10 +39,14 @@ const server = http.createServer(app);
 const io = initSocket(server);
 
 // Middlewares
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend URL
+  credentials: true // if sending cookies or auth headers
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: true, credentials: true }));
+
 app.use(morgan("dev"));
 app.use(helmet());
 
