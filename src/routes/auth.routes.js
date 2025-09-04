@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, signin, forgotPassword, resetPassword, googleLogin, appleLogin, signout, verifyOtpController } from "../controllers/auth.controller.js";
+import { signup, signin, forgotPassword, resetPassword, googleLogin, appleLogin, signout, verifyOtpController, changePasswordController } from "../controllers/auth.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
 const authRoutes = express.Router();
 
@@ -14,6 +14,7 @@ authRoutes.post("/reset-password", resetPassword)
 authRoutes.post("/google",googleLogin )
 authRoutes.post("/apple", appleLogin )
 authRoutes.post("/signout",authCheck, signout)
+authRoutes.post("/change-password",authCheck,  changePasswordController)
 
 
 

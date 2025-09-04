@@ -252,3 +252,38 @@ const appleData = await appleSigninAuth.verifyIdToken(idToken, {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
   return { user, token };
 };
+
+
+
+
+
+
+
+export const changePasswordService = async (userId, currentPassword, newPassword, confirmPassword) => {
+  // 1. Find user by ID
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  // 2. Check current password
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) throw new Error("Current password is incorrect");
+
+  if(newPassword.length<6){
+    throw new Error("Password is less than 6 characters");
+
+  }
+  // 3. Confirm new password
+  if (newPassword !== confirmPassword) {
+    throw new Error("New password and confirm password do not match");
+  }
+
+  // 4. Hash new password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  // 5. Update user password
+  user.password = hashedPassword;
+  await user.save();
+
+  return { message: "Password updated successfully" };
+};

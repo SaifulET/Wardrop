@@ -139,3 +139,27 @@ export const appleLogin = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+
+
+
+
+
+export const changePasswordController = async (req, res) => {
+  try {
+    const userId= req.headers.user_id 
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    const result = await authService.changePasswordService(userId, currentPassword, newPassword, confirmPassword);
+
+    res.status(200).json({
+      success: true,
+      message: result.message
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
