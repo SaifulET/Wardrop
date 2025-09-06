@@ -11,4 +11,4 @@ ItemsRoutes.get("/getItem/:id",authCheck, itemController.getItem);
 ItemsRoutes.put("/updateItem/:id",authCheck,conditionalUpload, itemController.updateItem);
 ItemsRoutes.delete("/deleteItem/:id",authCheck, itemController.deleteItem);
 ItemsRoutes.get("/getAllBrands",authCheck, itemController.getBrandsByUserController);
-export default ItemsRoutes;
+export default ItemsRoutes; 
