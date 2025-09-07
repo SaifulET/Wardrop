@@ -7,26 +7,26 @@ import {
 } from "../services/Outfit.service.js";
 
 // ➕ Create Outfit
-// 
+//
 export const createOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
 
     // const { title, season, style } = JSON.parse(req.body.data);
     const { title, season, style } = req.body;
-    console.log('Parsed data:', title, season, style);
+    console.log("Parsed data:", title, season, style);
 
     // Use let here so we can reassign later
-    let imagePath = null;
-    if (req.file) {
-      imagePath = `/uploads/outfits/${req.file.originalname}`;
-    }
+    // let imagePath = null;
+    // if (req.file) {
+    //   imagePath = `/uploads/outfits/${req.file.originalname}`;
+    // }
 
-    if (!imagePath) return res.status(400).json({ error: "Image is required" });
+    // if (!imagePath) return res.status(400).json({ error: "Image is required" });
 
-    const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
+    // const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
+    const outfit = await createOutfit(userId, { title, season, style });
     res.status(201).json(outfit);
-
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -54,7 +54,7 @@ export const createOutfitController = async (req, res) => {
 //      console.log("line15")
 //      console.log(title,season,style)
 //     //  const {title,season,style} = req.body
-    
+
 //     // file comes from multer
 //     const imagePath = req.file ? req.file.path : null;
 //     if (!imagePath) return res.status(400).json({ error: "Image is required" });
@@ -70,18 +70,16 @@ export const createOutfitController = async (req, res) => {
 export const updateOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
-    const outfitId  = req.params.id;
-    let updateData={}
-    if(req.body){
+    const outfitId = req.params.id;
+    let updateData = {};
+    if (req.body) {
       //  const { title, season, style } = JSON.parse(req.body.data);
-       const { title=null, season=null, style=null } = req.body;
-      
+      const { title = null, season = null, style = null } = req.body;
 
-    // If new image is uploaded
-    updateData = { title, season, style };
-    
+      // If new image is uploaded
+      updateData = { title, season, style };
     }
-   if (req.file) {
+    if (req.file) {
       updateData.image = req.file.path;
     }
 
@@ -93,10 +91,6 @@ export const updateOutfitController = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
-
-
-
-
 
 export const getUserOutfitsController = async (req, res) => {
   try {
@@ -112,8 +106,8 @@ export const getUserOutfitsController = async (req, res) => {
 export const getOutfitByIdController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
-    const outfitId  = req.params.id;
-    console.log(outfitId)
+    const outfitId = req.params.id;
+    console.log(outfitId);
 
     const outfit = await getOutfitById(outfitId, userId);
     if (!outfit) return res.status(404).json({ message: "Outfit not found" });
@@ -124,12 +118,10 @@ export const getOutfitByIdController = async (req, res) => {
   }
 };
 
-
-
 export const deleteOutfitController = async (req, res) => {
   try {
     const userId = req.headers.user_id;
-    const  outfitId  = req.params.id;
+    const outfitId = req.params.id;
 
     const deleted = await deleteOutfit(outfitId, userId);
     if (!deleted) return res.status(404).json({ message: "Outfit not found" });
@@ -139,5 +131,3 @@ export const deleteOutfitController = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
