@@ -14,7 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.883.0",
+<<<<<<< HEAD
     "@aws-sdk/s3-request-presigner": "^3.883.0",
+=======
+>>>>>>> 2a14120ae7a7e384432cf4a95d250b1a4acfcb28
     "apple-signin-auth": "^2.0.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
