@@ -11,7 +11,7 @@ export const createPlannerController = async (req, res) => {
   try {
     const { outfitId, date, time } = req.body; // Accept date & time separately
     const userId = req.headers.user_id; // from auth middleware
-
+console.log("Creating planner with:", { outfitId, date, time, userId });
     const planner = await createPlanner(outfitId, date, time, userId);
     res.status(201).json(planner);
   } catch (err) {

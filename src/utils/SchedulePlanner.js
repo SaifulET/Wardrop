@@ -2,10 +2,20 @@ import schedule from "node-schedule";
 import { createNotification } from "../services/Notification.service.js";
 import Outfit from "../models/Outfit.js";
 
+// Helper: convert "hh:mm AM/PM" to 24-hour hours and minutes
+const parseAmPm = (timeStr) => {
+  const [time, ampm] = timeStr.split(" ");
+  let [hour, minute] = time.split(":").map(Number);
+  if (ampm === "PM" && hour !== 12) hour += 12;
+  if (ampm === "AM" && hour === 12) hour = 0;
+  return { hour, minute };
+};
+
 export const schedulePlannerNotification = (planner) => {
+  const { hour, minute } = parseAmPm(planner.time);
+
   // Combine date and time into a single Date object
-  const [hour, minute] = planner.time.split(":").map(Number);
-  const notificationDate = new Date(planner.date); // planner.date is a Date object
+  const notificationDate = new Date(planner.date);
   notificationDate.setHours(hour, minute, 0, 0);
 
   // Only schedule if the notification time is in the future
