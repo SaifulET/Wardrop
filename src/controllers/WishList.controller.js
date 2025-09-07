@@ -3,7 +3,7 @@ import * as wishlistService from "../services/Wishlist.service.js";
 export const createWishlist = async (req, res) => {
   try {
     
-   const data= JSON.parse(req.body.data);
+   const data= req.body;
    
     const wishlist = await wishlistService.createWishlist(
       req.headers.user_id,

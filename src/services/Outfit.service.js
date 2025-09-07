@@ -8,10 +8,9 @@ import { createNotification } from "./Notification.service.js";
 export const createOutfit = async (userId, data) => {
   const { title, image, season, style } = data;
 
-    const styles = await Style.find({ name: { $in: style } }, "_id");
-    
-  
-  const  styleIds = styles.map(s => s._id);
+  // Find style IDs
+  const styles = await Style.find({ name: { $in: style } }, "_id name"); // get both _id and name
+  const styleIds = styles.map(s => s._id);
 
   // Check duplicate for same user
   const exists = await Outfit.findOne({ user: userId, title, image });
@@ -19,14 +18,14 @@ export const createOutfit = async (userId, data) => {
     throw new Error("Outfit with same title and image already exists for this user");
   }
 
-  const outfit = new Outfit({ user: userId, title, image, season, style: styleIds});
-  await Community.create({post:outfit._id, user:userId })
-
-
- const user = await User.findById(userId).populate("followers", "_id");
-  const followerIds = user.followers.map(f => f._id);
+  // Create outfit
+  const outfit = new Outfit({ user: userId, title, image, season, style: styleIds });
+  await Community.create({ post: outfit._id, user: userId });
 
   // Notify followers
+  const user = await User.findById(userId).populate("followers", "_id");
+  const followerIds = user.followers.map(f => f._id);
+
   for (const fid of followerIds) {
     await createNotification({
       userId: fid,
@@ -34,11 +33,16 @@ export const createOutfit = async (userId, data) => {
     });
   }
 
+  // Save outfit and populate user info and style names
+  const savedOutfit = await outfit.save();
+  const populatedOutfit = await Outfit.findById(savedOutfit._id)
+    .populate("user")           // full user info
+    .populate("style", "name"); // populate style names only
 
-
-
-  return await outfit.save();
+  return populatedOutfit;
 };
+
+
 
 // Get all outfits of a user
 export const getUserOutfits = async (userId) => {

@@ -7,7 +7,7 @@ const OutfitRoutes = express.Router();
 
 OutfitRoutes.post(
   "/createOutfit",
-  authCheck,
+  authCheck,conditionalUpload,
   outfitController.createOutfitController
 );
 OutfitRoutes.put(

@@ -12,10 +12,8 @@ const plannerSchema = new mongoose.Schema(
       ref: "Outfit", 
       required: true,
     },
-    settingTime: {
-      type: Date, 
-      required: true,
-    },
+    date: { type: Date, required: true },      // Stores the day
+  time: { type: String, required: true }, 
   },
   { timestamps: true }
 );
