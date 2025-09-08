@@ -116,56 +116,47 @@ export const getUserActivityStats = async (period = "monthly") => {
       };
   }
 
-  const result = await User.aggregate([
-    // Flatten login history
-    { $unwind: "$loginHistory" },
+ const result = await User.aggregate([
+  { $unwind: { path: "$loginHistory", preserveNullAndEmptyArrays: true } },
 
-    // Add fields for firstLoginPeriod & loginPeriod
-    {
-      $addFields: {
-        firstLoginPeriod: {
-          $dateTrunc: { date: "$firstLogin", unit: unit }
-        },
-        loginPeriod: {
-          $dateTrunc: { date: "$loginHistory.loginAt", unit: unit }
-        }
-      }
-    },
-
-    {
-      $facet: {
-        // ✅ NEW USERS: count based on firstLogin only
-        newUsers: [
-          {
-            $group: {
-              _id: "$firstLoginPeriod",
-              users: { $addToSet: "$_id" }
-            }
-          },
-          { $project: { _id: 1, count: { $size: "$users" } } },
-          { $sort: { _id: 1 } }
-        ],
-
-        // ✅ OLD USERS: logins after firstLogin
-        oldUsers: [
-          {
-            $match: { $expr: { $gt: ["$loginPeriod", "$firstLoginPeriod"] } }
-          },
-          {
-            $group: {
-              _id: "$loginPeriod",
-              users: { $addToSet: "$_id" }
-            }
-          },
-          { $project: { _id: 1, count: { $size: "$users" } } },
-          { $sort: { _id: 1 } }
-        ]
-      }
+  {
+    $addFields: {
+      firstLoginPeriod: { $dateTrunc: { date: "$firstLogin", unit: unit } },
+      loginPeriod: { $dateTrunc: { date: "$loginHistory.loginAt", unit: unit } }
     }
-  ]);
+  },
 
+  {
+    $facet: {
+      newUsers: [
+        {
+          $group: {
+            _id: "$firstLoginPeriod",
+            users: { $addToSet: "$_id" }
+          }
+        },
+        { $project: { _id: 1, count: { $size: "$users" } } },
+        { $sort: { _id: 1 } }
+      ],
+
+      oldUsers: [
+        { $match: { $expr: { $gt: ["$loginHistory.loginAt", "$firstLogin"] } } },
+        {
+          $group: {
+            _id: "$loginPeriod",
+            users: { $addToSet: "$_id" }
+          }
+        },
+        { $project: { _id: 1, count: { $size: "$users" } } },
+        { $sort: { _id: 1 } }
+      ]
+    }
+  }
+]);
+
+console.log( result[0].newUsers[0].count)
   return {
-    newUsers: result[0].newUsers,
+    newUsers:  result[0].newUsers,
     oldUsers: result[0].oldUsers
   };
 };
