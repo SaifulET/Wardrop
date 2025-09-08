@@ -9,7 +9,7 @@ export const getUserProfile = async (userId) => {
   if (!user) throw new Error("User not found");
   return user;
 };
-export const updateProfile = async (userId, updateData,file=null) => {
+export const updateProfile = async (userId, updateData,file) => {
 try {
   //  const  updateData= JSON.parse(updatedData);
    console.log(updateData,"from service")

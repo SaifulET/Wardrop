@@ -1,9 +1,8 @@
 import { Schema, model } from "mongoose";
 const CategorySchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User"},
   name: { type: String, required: true,unique: true },
-  subCategory: { type: String  },
-  subsubCategory: { type: String  }, 
+  
   items: { type: Schema.Types.ObjectId, ref: "Item" }
 }, { timestamps: true });
 
