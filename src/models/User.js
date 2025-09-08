@@ -5,6 +5,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 
   name: { type: String },
+  username:{type:String},
 phone:{type:String, unique:true, sparse:true},
   otp: { type: String },
   otpExpires: { type: Date },
