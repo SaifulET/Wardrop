@@ -156,9 +156,7 @@ export const updateAdminProfile = async (userId, jsonData,file) => {
   // If image is provided
 
   if (file) {
-    // Local storage example
-    const imagePath = `/uploads/profile/${file.filename}`;  
-    user.profile = imagePath;
+    user.profile = file;
   }
 
   // Update only provided fields (PATCH behavior)

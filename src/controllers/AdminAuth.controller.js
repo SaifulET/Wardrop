@@ -139,7 +139,7 @@ export const updateAdminProfileController = async (req, res, next) => {
   try {
     const userId = req.headers.user_id;
     console.log(userId);
-    const updateData = req.body.data; // Assuming the update data is in the request body
+    const updateData = req.body; // Assuming the update data is in the request body
     let imageUrls = [];
     if (req.files && req.files.length > 0) {
       imageUrls = req.files.map(file =>
