@@ -128,33 +128,71 @@ export const getItemById = async (id,user) => {
 
 
 
-export const updateItem = async (id, data,user) =>{
-  const query = {}
-  query.user = user;
-  if (data.category) {
+export const updateItem = async (id, data, user) => {
+  try {
+    const query = {};
 
-    const cat= await Category.findOne({ items: id, name: data.category,user:user });
-    if (cat) {
-      query.category = cat._id.toString();
+    // Handle category update
+    if (data.category) {
+      let cat = await Category.findOne({ items: id, name: data.category, user });
+
+      if (cat) {
+        query.category = [cat._id]; // must be an array of ObjectIds
+      } else {
+        const categoryData = {
+          name: data.category,
+          items: id,
+          user
+        };
+
+        const categoryDoc = new Category(categoryData);
+        await categoryDoc.save();
+
+        query.category = [categoryDoc._id];
+      }
     }
-    else {
-    const categoryData = {};
-    if (data.category) categoryData.name = data.category;
-    
 
-  categoryData.items= id;
-  categoryData.user = user;
-
-    
-  const categoryDoc = new Category(categoryData);
-  await categoryDoc.save()
-    query.category = categoryDoc._id.toString();
+    // Handle title update
+    if (data.title) {
+      query.title = data.title;
     }
-  };
 
-    const item =await Item.findByIdAndUpdate({_id:id},query, { new: true, runValidators: true });
+    // Handle brand update
+    if (data.brand) {
+      query.brand = data.brand;
+    }
+
+    // Handle other optional fields
+    if (data.material) query.material = data.material;
+    if (data.colors) query.colors = data.colors;
+    if (data.season) query.season = data.season;
+    if (data.style) query.style = data.style;
+    if (data.image) query.image = data.image;
+
+    console.log("Update query:", query);
+const ob = await Item.findById(id)
+console.log("dkls",ob,"kd")
+    // Update item only if it belongs to the user
+   const item = await Item.findByIdAndUpdate(
+  id,
+  query,
+  { new: true, runValidators: true }
+);
+
+console.log(item)
+    if (!item) {
+      throw new Error("Item not found or not authorized");
+    }
+
+    console.log("Updated item:", item);
     return item;
-}
+
+  } catch (error) {
+    console.error("Error updating item:", error.message);
+    throw error;
+  }
+};
+
   
 
 export const deleteItem = async (id) => {
