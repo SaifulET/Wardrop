@@ -32,7 +32,6 @@ import AffiliateDataRoute from "./routes/AffiliateData.routes.js";
 import CategoryRoute from "./routes/Category.routes.js";
 import MetarialRoute from "./routes/Metarials.routes.js";
 import AdminNotificationRoute from "./routes/AdminNotification.routes.js";
-import imageRoute from "./routes/image.routes.js";
 
 dotenv.config();
 const app = express();
@@ -87,7 +86,6 @@ app.use("/Metarial", MetarialRoute);
 app.use("/affiliateData", AffiliateDataRoute);
 app.use("/AdminNotification", AdminNotificationRoute);
 
-app.use("/images", imageRoute);
 
 // MongoDB Connection
 mongoose

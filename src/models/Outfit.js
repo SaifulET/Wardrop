@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const outfitSchema = new Schema(
   {
     title: { type: String, required: true },
-    image: { type: String,  }, // saved image URL
+    image: [{ type: String,  }], // saved image URL
     season: { type: [String], default: [] }, // e.g. ["Summer", "Winter"]
     style: { type: mongoose.Schema.Types.ObjectId, ref: "Style" },  // e.g. ["Casual", "Formal"]
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },

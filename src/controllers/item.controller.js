@@ -7,7 +7,12 @@ export const createItem = async (req, res, next) => {
     // const data =JSON.parse(req.body.data);
     const data=req.body;
     console.log(data,"from 9th")
-    if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
+    
+    if (req.files && req.files.length > 0) {
+      data.image = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
     data.user= req.headers.user_id;
     const item = await itemService.createItem(data);
     res.status(201).json(item);
@@ -41,7 +46,12 @@ export const updateItem = async (req, res, next) => {
     // const data = JSON.parse(req.body.data);
     const data = req.body
     console.log(data)
-    if (req.file) data.image = `/uploads/items/${req.file.originalname}`;
+    
+    if (req.files && req.files.length > 0) {
+      data.image = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
     const item = await itemService.updateItem(req.params.id, data, req.headers.user_id);
     if (!item) return res.status(404).json({ message: "Item not found" });
     res.json(item);

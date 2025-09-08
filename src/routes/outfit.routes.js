@@ -1,19 +1,19 @@
 import express from "express";
 import * as outfitController from "../controllers/Outfit.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
-import { conditionalUpload } from "../middlewares/multer.middleware.js";
+import { uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
 const OutfitRoutes = express.Router();
 
 OutfitRoutes.post(
   "/createOutfit",
-  authCheck,conditionalUpload,
+  authCheck,uploadMiddleware.array("images", 10),
   outfitController.createOutfitController
 );
 OutfitRoutes.put(
   "/updateOutfit/:id",
   authCheck,
-  conditionalUpload,
+  uploadMiddleware.array("images", 10),
   outfitController.updateOutfitController
 );
 OutfitRoutes.delete(

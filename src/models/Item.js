@@ -9,7 +9,7 @@ const itemSchema = new Schema({
   colors: [String],
   season: [String],
   style: [String],
-  image: { type: String }
+  image: [{ type: String }]
 }, { timestamps: true });
 
 export default model("Item", itemSchema);

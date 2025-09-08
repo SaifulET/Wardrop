@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
-  username: { type: String, unique: true },
+
   name: { type: String },
 phone:{type:String, unique:true, sparse:true},
   otp: { type: String },
@@ -14,7 +14,7 @@ phone:{type:String, unique:true, sparse:true},
   enum: ["English", "Russian"], 
   default: "English" 
 },
-  profileImage: { type: String },
+  profileImage:   [{ type: String }],
   dob: { type: String },
   bio: { type: String },
   location: { type: String },

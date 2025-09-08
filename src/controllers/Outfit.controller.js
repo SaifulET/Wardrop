@@ -15,6 +15,12 @@ export const createOutfitController = async (req, res) => {
     // const { title, season, style } = JSON.parse(req.body.data);
     const { title, season, style } = req.body;
     console.log("Parsed data:", title, season, style);
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
 
     // Use let here so we can reassign later
     // let imagePath = null;
@@ -25,7 +31,7 @@ export const createOutfitController = async (req, res) => {
     // if (!imagePath) return res.status(400).json({ error: "Image is required" });
 
     // const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
-    const outfit = await createOutfit(userId, { title, season, style });
+    const outfit = await createOutfit(userId, { title, season, style, image: imageUrls });
     res.status(201).json(outfit);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -80,7 +86,13 @@ export const updateOutfitController = async (req, res) => {
       updateData = { title, season, style };
     }
     if (req.file) {
-      updateData.image = req.file.path;
+
+
+    if (req.files && req.files.length > 0) {
+      updateData.image = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
     }
 
     const outfit = await updateOutfit(outfitId, userId, updateData);

@@ -3,12 +3,20 @@ import * as wishlistService from "../services/Wishlist.service.js";
 export const createWishlist = async (req, res) => {
   try {
     
-   const data= req.body;
+   const data= JSON.parse(req.body.data);
+  //  const data= req.body
+
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
    
     const wishlist = await wishlistService.createWishlist(
       req.headers.user_id,
       data,
-     req.savedFiles || []
+      imageUrls
     );
     res.status(201).json(wishlist);
   } catch (error) {
@@ -47,10 +55,16 @@ export const deleteWishlist = async (req, res) => {
 
 export const addImagesToWishlist = async (req, res) => {
   try {
+     let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file =>
+        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
+      );
+    }
     const wishlist = await wishlistService.addImagesToWishlistService(
       req.params.id,
       req.headers.user_id,
-      req.savedFiles || []
+      imageUrls
     );
     res.json(wishlist);
   } catch (err) {

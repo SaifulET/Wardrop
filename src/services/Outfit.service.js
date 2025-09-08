@@ -69,12 +69,22 @@ export const updateOutfit = async (outfitId, userId, data) => {
     if (duplicate) throw new Error("Outfit with same title and image already exists");
   }
 
-  return await Outfit.findOneAndUpdate(
+  // Update the outfit and return the updated document
+  const updatedOutfit = await Outfit.findOneAndUpdate(
     { _id: outfitId, user: userId },
     { $set: data },
     { new: true }
-  );
+  )
+  // Populate style (only return name) and user (return all info)
+  .populate({
+    path: 'style',
+    select: 'name', // only style name
+  })
+  .populate('user'); // return full user document
+
+  return updatedOutfit;
 };
+
 
 // Delete Outfit
 export const deleteOutfit = async (outfitId, userId) => {
