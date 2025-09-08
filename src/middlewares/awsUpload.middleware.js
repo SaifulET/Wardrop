@@ -34,3 +34,26 @@ export const uploadMiddleware = multer({
   },
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
 });
+
+
+
+export const SingleuploadMiddleware = multer({
+  storage: multerS3({
+    s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    contentDisposition: "inline", // 👈 ensures browser views instead of downloading
+    key: (req, file, cb) => {
+      const fileName = `uploads/${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`;
+      cb(null, fileName);
+    },
+  }),
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed!"), false);
+    }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+}).single("image"); 

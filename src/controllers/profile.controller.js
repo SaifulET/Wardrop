@@ -19,13 +19,12 @@ export const updateProfile = async (req, res, next) => {
     // Assuming the update data is in the request body
     if(req.file){
 
-       let imageUrls = [];
-    if (req.files && req.files.length > 0) {
-      imageUrls = req.files.map(file =>
-        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
-      );
-    }
-        const updatedProfile = await profileService.updateProfile(userId, req.body,imageUrls);
+      let imageUrl = null;
+if (req.file) {
+  imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+}
+
+        const updatedProfile = await profileService.updateProfile(userId, req.body,imageUrl);
       res.json(updatedProfile);
     }
     

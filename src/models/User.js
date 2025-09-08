@@ -14,7 +14,7 @@ phone:{type:String, unique:true, sparse:true},
   enum: ["English", "Russian"], 
   default: "English" 
 },
-  profileImage:   [{ type: String }],
+  profileImage:   { type: String },
   dob: { type: String },
   bio: { type: String },
   location: { type: String },

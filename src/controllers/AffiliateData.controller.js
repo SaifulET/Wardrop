@@ -13,11 +13,11 @@ export const createAffiliateData = async (req, res) => {
     const data=req.body;
     console.log(data,"from 9th")
      
-    if (req.files && req.files.length > 0) {
-      data.image = req.files.map(file =>
-        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
-      );
-    }
+   
+if (req.file) {
+  data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+}
+
     const result = await createNotificationService(data);
     res.status(201).json({ success: true, data: result });
   } catch (error) {
@@ -41,11 +41,11 @@ export const editAffiliateData = async (req, res) => {
     const data=req.body;
     console.log(data,"from 9th")
      
-    if (req.files && req.files.length > 0) {
-      data.image = req.files.map(file =>
-        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
-      );
-    }
+    
+if (req.file) {
+  data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+}
+
     const notification = await editNotificationService(id, data);
     if (!notification) return res.status(404).json({ success: false, message: "Notification not found" });
     res.status(200).json({ success: true, data: notification });

@@ -23,10 +23,8 @@ try {
   // If image is provided
 
   if (file) {
-    // Local storage example
-    const imagePath = `/uploads/profile/${file.originalname}`;
-  console.log(imagePath)
-    user.profileImage = imagePath;
+   
+    user.profileImage = file;
   }
 
   // Update only provided fields (PATCH behavior)

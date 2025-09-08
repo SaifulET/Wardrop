@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const AffiliatedSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String, },
     description: { type: String },
     image: { type: String },
     link: { type: String },

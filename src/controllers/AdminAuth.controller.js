@@ -140,17 +140,16 @@ export const updateAdminProfileController = async (req, res, next) => {
     const userId = req.headers.user_id;
     console.log(userId);
     const updateData = req.body; // Assuming the update data is in the request body
-    let imageUrls = [];
-    if (req.files && req.files.length > 0) {
-      imageUrls = req.files.map(file =>
-        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
-      );
-    } // Assuming multer middleware is used to handle file uploads
+    let imageUrl = null;
+if (req.file) {
+  imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+}
+
     console.log(updateData);
     const updatedProfile = await authService.updateAdminProfile(
       userId,
       updateData,
-      imageUrls
+      imageUrl
     );
     res.json(updatedProfile);
   } catch (error) {
