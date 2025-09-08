@@ -7,11 +7,11 @@ import { createAdminNotification } from "./AdminNotification.services.js";
 export const createReportService = async ({ reporterId, targetUserId, targetCommunityId, reason, reportType }) => {
   console.log(reporterId,targetUserId,targetCommunityId,reason,reportType)
 
-  if (!["profile", "post"].includes(reportType)) {
+  if (!["Profile", "Post"].includes(reportType)) {
     throw new Error("Invalid report type");
   }
 
-  if (reportType === "post") {
+  if (reportType === "Post") {
     if (!targetCommunityId) throw new Error("targetCommunityId required for post report");
 
     // fetch the Community post to get its owner
@@ -34,7 +34,7 @@ export const createReportService = async ({ reporterId, targetUserId, targetComm
     return report 
   }
 
-  if (reportType === "profile") {
+  if (reportType === "Profile") {
     if (!targetUserId) throw new Error("targetUserId required for user report");
 
     const report= await Report.create({
@@ -74,7 +74,7 @@ export const deleteReportByIdService = async (reportId) => {
   const report = await Report.findById(reportId);
   if (!report) throw new Error("Report not found");
 
-  if (report.reportType === "post" && report.targetCommunity) {
+  if (report.reportType === "Post" && report.targetCommunity) {
     // Delete the community post
     const community = await Community.findById(report.targetCommunity);
     if (community) {
@@ -95,18 +95,18 @@ export const toggleReportStatusService = async (reportId) => {
   if (!report) throw new Error("Report not found");
 
   // Toggle between "pending" and "banned"
-  report.status = report.status === "pending" ? "Banned" : "pending";
+  report.status = report.status === "Pending" ? "Banned" : "Pending";
   await report.save();
   console.log(report.status)
   // If banned and post type, deactivate related post
-  if (report.status === "Banned" && report.reportType === "post" && report.targetCommunity) {
+  if (report.status === "Banned" && report.reportType === "Post" && report.targetCommunity) {
     const community = await Community.findById(report.targetCommunity);
     if (community) {
       await Outfit.findByIdAndUpdate(community.post, { active: false }); // deactivate post
     }
   }
   console.log(report.targetUser.toString())
-  if(report.status==="Banned" && report.reportType==="profile" ){
+  if(report.status==="Banned" && report.reportType==="Profile" ){
     await User.findByIdAndUpdate({_id:report.targetUser.toString()}, { disabled:true }); 
   }
 

@@ -7,7 +7,7 @@ export const createReportController = async (req, res) => {
     console.log(req.body,"kd")
     const reporterId = req.headers.user_id;
     const temp= null;
-    if(reportType==="post"){
+    if(reportType==="Post"){
       const {targetCommunity} = req.body
       const report = await createReportService({
       reporterId,
