@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 
 
 export const createItem = async (data) => {
-const { category, material, ...rest } = data;
+try {
+  const { category, material, ...rest } = data;
 console.log(data,"from 7 line")
     // Convert category names to ObjectIds
 
@@ -24,6 +25,10 @@ console.log(item)
 
   // const item = new Item({ ...data, user: userId });
   return await item.save();
+} catch (error) {
+  throw new Error("Error creating item: " + error.message);
+  
+}
 };
 
 export const getItems = async (filters,id) => {
