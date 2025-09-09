@@ -24,8 +24,13 @@ export const createDressMe = async ({ title, style, season, groupsData },userId)
     groups: groupIds,
     user: userId 
   })
+  const populatedDressMe = await DressMe.findById(createDressMe._id)
+  .populate({
+    path: "groups",
+    populate: { path: "items" } // nested populate for items
+  });
  
-  return createDressMe;
+  return populatedDressMe;
 
 };
 
