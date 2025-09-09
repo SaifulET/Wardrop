@@ -1,3 +1,4 @@
+import { json } from "zod";
 import {
   createOutfit,
   getUserOutfits,
@@ -13,6 +14,8 @@ export const createOutfitController = async (req, res) => {
     const userId = req.headers.user_id;
 
     // const { title, season, style } = JSON.parse(req.body.data);
+    // const data=JSON.parse(req.body.data)
+    // const { title, season, style } = data;
     const { title, season, style } = req.body;
     console.log("Parsed data:", title, season, style);
     let imageUrl = null;

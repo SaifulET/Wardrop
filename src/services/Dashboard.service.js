@@ -3,6 +3,7 @@ import Outfit from "../models/Outfit.js";
 import Community from "../models/Community.js";
 import Feedback from "../models/Feedback.js";
 import AffiliateData from "../models/AffiliateData.js";
+import Report from "../models/Report.js";
 
 export const getTotalUsers = async () => {
   return await User.countDocuments();
@@ -32,7 +33,7 @@ export const countDisabledUsers = async () => {
   return await User.countDocuments({ disabled: true });
 };
 export const countReports = async () => {
-  return await Community.countDocuments();
+  return await Report.countDocuments();
 };
 
 
