@@ -131,6 +131,7 @@ export const getItemById = async (id,user) => {
 export const updateItem = async (id, data, user) => {
   try {
     const query = {};
+    console.log("Updating item with data:", data);
 
     // Handle category update
     if (data.category) {
@@ -174,7 +175,7 @@ const ob = await Item.findById(id)
 console.log("dkls",ob,"kd")
     // Update item only if it belongs to the user
    const item = await Item.findByIdAndUpdate(
-  id,
+      { _id: id, user },
   query,
   { new: true, runValidators: true }
 );

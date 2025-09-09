@@ -12,6 +12,8 @@ export const createWishlist = async (req, res) => {
         `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
       );
     }
+    console.log("Image URLs:", imageUrls);
+    console.log("Request Body Data:", data);
    
     const wishlist = await wishlistService.createWishlist(
       req.headers.user_id,
