@@ -5,7 +5,7 @@ import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
 export const createReportService = async ({ reporterId, targetUserId, targetCommunity, reason, reportType }) => {
-  console.log(reporterId,targetUserId,targetCommunityId,reason,reportType)
+  console.log(reporterId,targetUserId,targetCommunity,reason,reportType)
 
   if (!["Profile", "Post"].includes(reportType)) {
     throw new Error("Invalid report type");
