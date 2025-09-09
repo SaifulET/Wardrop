@@ -4,7 +4,7 @@ import Outfit from "../models/Outfit.js";
 import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
-export const createReportService = async ({ reporterId, targetUserId, targetCommunityId, reason, reportType }) => {
+export const createReportService = async ({ reporterId, targetUserId, targetCommunity, reason, reportType }) => {
   console.log(reporterId,targetUserId,targetCommunityId,reason,reportType)
 
   if (!["Profile", "Post"].includes(reportType)) {
@@ -12,17 +12,17 @@ export const createReportService = async ({ reporterId, targetUserId, targetComm
   }
 
   if (reportType === "Post") {
-    if (!targetCommunityId) throw new Error("targetCommunityId required for post report");
+    if (!targetCommunity) throw new Error("targetCommunity required for post report");
 
     // fetch the Community post to get its owner
-    const community = await Community.findById(targetCommunityId)
+    const community = await Community.findById(targetCommunity)
     
     if (!community) throw new Error("Community post not found");
 
     const report= await Report.create({
       reporter: reporterId,
       targetUser:  community.user, 
-      targetCommunity: targetCommunityId,
+      targetCommunity: targetCommunity,
       reason,
       reportType,
     });

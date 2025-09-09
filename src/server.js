@@ -32,6 +32,8 @@ import AffiliateDataRoute from "./routes/AffiliateData.routes.js";
 import CategoryRoute from "./routes/Category.routes.js";
 import MetarialRoute from "./routes/Metarials.routes.js";
 import AdminNotificationRoute from "./routes/AdminNotification.routes.js";
+import { userInfo } from "os";
+import UserInfoRoute from "./routes/userinfoById.routes.js";
 
 dotenv.config();
 const app = express();
@@ -85,6 +87,9 @@ app.use("/Metarial", MetarialRoute);
 
 app.use("/affiliateData", AffiliateDataRoute);
 app.use("/AdminNotification", AdminNotificationRoute);
+
+
+app.use("/userInfoById",UserInfoRoute);
 
 
 // MongoDB Connection
