@@ -32,7 +32,7 @@ export const uploadMiddleware = multer({
       cb(new Error("Only image files are allowed!"), false);
     }
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
 });
 
 
