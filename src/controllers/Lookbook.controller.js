@@ -63,12 +63,24 @@ export const addToLookbook = async (req, res) => {
   }
 };
 
-// Remove items/outfits
-export const removeFromLookbook = async (req, res) => {
+
+
+export const removeFromLookbookController = async (req, res) => {
   try {
-    const lookbook = await lookbookService.removeFromLookbook(req.params.id, req.body, req.headers.user_id);
-    res.json(lookbook);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const { lookbookId } = req.params;
+    const { ids } = req.body; // array of item or outfit ids
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: "Provide an array of ids to remove" });
+    }
+
+    const result = await lookbookService.removeFromLookbookService(lookbookId, ids);
+
+    res.status(200).json({
+      message: result.message || "Removed successfully",
+      lookbook: result._id ? result : null
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

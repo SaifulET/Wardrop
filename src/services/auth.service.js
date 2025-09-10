@@ -58,7 +58,7 @@ const now = new Date();
   await user.save();
   await createAdminNotification({
       userId: user._id,
-      RegistrationId: user._id
+      RegistratedId: user._id
     });
     return {user,token};
   } catch (error) {

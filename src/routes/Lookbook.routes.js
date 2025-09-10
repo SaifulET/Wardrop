@@ -10,6 +10,7 @@ LookbookRoutes.get("/GetLookbookById/:id", authCheck, lookbookController.getLook
 LookbookRoutes.patch("/UpdateLookbookById/:id", authCheck, lookbookController.updateLookbook);
 LookbookRoutes.delete("/DeleteLookbook/:id", authCheck, lookbookController.deleteLookbook);
 LookbookRoutes.patch("/AdditemstoLookbook/:id", authCheck, lookbookController.addToLookbook);
-LookbookRoutes.patch("/removeItemFromLookbook/:id", authCheck, lookbookController.removeFromLookbook);
+LookbookRoutes.patch("/removeItemsOrOutfitToLookbook/:lookbookId", authCheck, lookbookController.removeFromLookbookController);
+
 
 export default LookbookRoutes;

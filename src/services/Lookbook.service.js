@@ -46,11 +46,28 @@ export const addToLookbook = async (id, data, userId) => {
   ).populate("items").populate("outfits");
 };
 
-// Remove items/outfits
-export const removeFromLookbook = async (id, data, userId) => {
-  return await Lookbook.findOneAndUpdate(
-    { _id: id, user: userId },
-    { $pull: { items: { $in: data.items || [] }, outfits: { $in: data.outfits || [] } } },
-    { new: true }
-  ).populate("items").populate("outfits");
+
+
+export const removeFromLookbookService = async (lookbookId, idsToRemove) => {
+  // Find the lookbook first
+  const lookbook = await Lookbook.findById(lookbookId);
+  if (!lookbook) throw new Error("Lookbook not found");
+
+  // Determine whether it's items or outfits
+  let type = null;
+  if (lookbook.items && lookbook.items.length > 0) type = "items";
+  else if (lookbook.outfits && lookbook.outfits.length > 0) type = "outfits";
+  else throw new Error("Lookbook has no items or outfits");
+
+  // Remove the specified ids
+  lookbook[type] = lookbook[type].filter(id => !idsToRemove.includes(id.toString()));
+
+  // If empty after removal, delete the lookbook
+  if (lookbook[type].length === 0) {
+    await Lookbook.findByIdAndDelete(lookbookId);
+    return { message: `All ${type} removed. Lookbook deleted.` };
+  }
+
+  await lookbook.save();
+  return lookbook;
 };
