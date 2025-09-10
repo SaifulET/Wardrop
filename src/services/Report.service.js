@@ -187,9 +187,10 @@ console.log(reportss);
     const outfit = await Outfit.findById(community.post).select("title image createdAt");
     return {
       reportId: reportss._id,
+      reportedBy: reportss.reporter,
       reportType: "Post",
       reportedAt: reportss.reportedAt,
-      reason: reportss.message,
+      reason: reportss.reason,
       outfit: outfit
         ? {
             title: outfit.title,
