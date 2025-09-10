@@ -3,7 +3,7 @@ import outfit from "../models/Outfit.js"
 
 export const getAllPostsService = async () => {
   // 1. Fetch all outfits
-  const posts = await outfit.find({})
+  const posts = await outfit.find({active:true})
     .populate("user") // load full user object
     .lean();
 
