@@ -56,7 +56,12 @@ export const getOutfitById = async (outfitId, userId) => {
 
 // Update Outfit
 export const updateOutfit = async (outfitId, userId, data) => {
-  const { title, image } = data;
+  const { title, image,style } = data;
+
+  
+  // Find style IDs
+  const styles = await Style.find({ name: { $in: style } }, "_id name"); // get both _id and name
+  const styleIds = styles.map(s => s._id);
 
   // Prevent duplicate check on update
   if (title && image) {
@@ -64,6 +69,7 @@ export const updateOutfit = async (outfitId, userId, data) => {
       _id: { $ne: outfitId },
       user: userId,
       title,
+      style:styleIds,
       image,
     });
     if (duplicate) throw new Error("Outfit with same title and image already exists");
