@@ -168,7 +168,10 @@ export const getReportDetailsByIdService = async (reportId) => {
     throw new Error("Invalid reportId");
   }
 console.log(new mongoose.Types.ObjectId(reportId))
-const reportss = await Report.findById(reportId);
+ const reportss = await Report.findById(reportId)
+    .populate("reporter", "name username email") // populate only required fields
+    .lean(); 
+
 console.log(reportss);
  
 
@@ -195,6 +198,7 @@ console.log(reportss);
       reportType: "Post",
       reportedAt: reportss.reportedAt,
       reason: reportss.reason,
+      status: reportss.status,
       outfit: outfit
         ? {
             title: outfit.title,
@@ -211,9 +215,11 @@ console.log(reportss);
     );
     return {
       reportId: reportss._id,
+      reportedBy: reportss.reporter,
       reportType: "Profile",
       reportedAt: reportss.reportedAt,
       reason: reportss.message,
+      status: reportss.status,
       user,
     };
   }
