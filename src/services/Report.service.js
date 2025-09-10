@@ -170,7 +170,13 @@ export const getReportDetailsByIdService = async (reportId) => {
 console.log(new mongoose.Types.ObjectId(reportId))
 const reportss = await Report.findById(reportId);
 console.log(reportss);
-  // Step 1: Find the report inside Community.reports
+ 
+
+  
+
+  // Step 2: Handle based on type
+  if (reportss.reportType === "Post") {
+ // Step 1: Find the report inside Community.reports
   const community = await Community.findOne({_id: reportss.targetCommunity }
 );
 
@@ -180,10 +186,8 @@ console.log(reportss);
   }
  
 
-  
 
-  // Step 2: Handle based on type
-  if (reportss.reportType === "Post") {
+
     const outfit = await Outfit.findById(community.post).select("title image createdAt");
     return {
       reportId: reportss._id,
