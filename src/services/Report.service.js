@@ -30,6 +30,7 @@ export const createReportService = async ({ reporterId, targetUserId, targetComm
       reportType,
     });
     community.reports.push({ user: reporterId, message: reason });
+    await community.save();
     await createAdminNotification({
       userId: reporterId,
       ReportId: report._id
@@ -166,25 +167,29 @@ export const getReportDetailsByIdService = async (reportId) => {
   if (!mongoose.Types.ObjectId.isValid(reportId)) {
     throw new Error("Invalid reportId");
   }
-
+console.log(new mongoose.Types.ObjectId(reportId))
+const reportss = await Report.findById(reportId);
+console.log(reportss);
   // Step 1: Find the report inside Community.reports
-  const community = await Community.findOne({ "reports._id": reportId });
+  const community = await Community.findOne({_id: reportss.targetCommunity }
+);
+
   console.log(community)
   if (!community) {
     throw new Error("Report not found");
   }
  
 
-  const report = community.reports.id(reportId); // extract specific report
+  
 
   // Step 2: Handle based on type
-  if (report.reportType === "Post") {
+  if (reportss.reportType === "Post") {
     const outfit = await Outfit.findById(community.post).select("title image createdAt");
     return {
-      reportId: report._id,
+      reportId: reportss._id,
       reportType: "Post",
-      reportedAt: report.reportedAt,
-      reason: report.message,
+      reportedAt: reportss.reportedAt,
+      reason: reportss.message,
       outfit: outfit
         ? {
             title: outfit.title,
@@ -195,15 +200,15 @@ export const getReportDetailsByIdService = async (reportId) => {
     };
   }
 
-  if (report.reportType === "Profile") {
-    const user = await User.findById(report.targetUser).select(
+  if (reportss.reportType === "Profile") {
+    const user = await User.findById(reportss.targetUser).select(
       "username name email phone profileImage bio gender dob location createdAt"
     );
     return {
-      reportId: report._id,
+      reportId: reportss._id,
       reportType: "Profile",
-      reportedAt: report.reportedAt,
-      reason: report.message,
+      reportedAt: reportss.reportedAt,
+      reason: reportss.message,
       user,
     };
   }
