@@ -3,7 +3,10 @@ const { Schema } = mongoose;
 
 const feedbackSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user:  {
+    type: mongoose.Schema.Types.ObjectId,  
+    ref: "User"
+  },
     title: { type: String, required: true },
     message: { type: String, required: true },
     time: { type: Date, default: Date.now } 

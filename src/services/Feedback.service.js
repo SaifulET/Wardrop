@@ -14,7 +14,9 @@ export const createFeedback = async (userId, data) => {
 
 // Get all feedback (admin purpose)
 export const getAllFeedback = async () => {
-  return await Feedback.find().populate("user", "name").lean();
+  const allFeedback= await Feedback.find().populate('user', 'name username email').lean();
+    
+  return allFeedback;
 };
 
 // Get feedback by user
