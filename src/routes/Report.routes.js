@@ -1,5 +1,5 @@
 import express from "express";
-import { createReportController,deleteReportByIdController,getAllReportsController, searchReportsController, toggleReportStatusController } from "../controllers/Report.controller.js";
+import { createReportController,deleteReportByIdController,getAllReportsController, getReportDetailsByIdController, searchReportsController, toggleReportStatusController } from "../controllers/Report.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js"; // your JWT auth middleware
 
 const  ReportRoute= express.Router();
@@ -10,6 +10,10 @@ ReportRoute.get("/ReportRead", authCheck, getAllReportsController);
 ReportRoute.post("/Reportdelete", authCheck, deleteReportByIdController);
 ReportRoute.post("/ReportStatusToggle", authCheck, toggleReportStatusController);
 ReportRoute.post("/ReportFilter", authCheck,searchReportsController);
+ReportRoute.get("/reports/:id", authCheck, getReportDetailsByIdController);
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-import { createReportService, deleteReportByIdService, getAllReportsService, searchReportsService, toggleReportStatusService } from "../services/Report.service.js";
+import { createReportService, deleteReportByIdService, getAllReportsService, searchReportsService, toggleReportStatusService,getReportDetailsByIdService } from "../services/Report.service.js";
 
 export const createReportController = async (req, res) => {
   try {
@@ -97,5 +97,21 @@ export const searchReportsController = async (req, res) => {
       success: false,
       message: error.message
     });
+  }
+};
+
+
+
+
+export const getReportDetailsByIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await getReportDetailsByIdService(id);
+    if (!report) {
+      return res.status(404).json({ success: false, message: "Report not found" });
+    }
+    res.status(200).json({ success: true, report });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

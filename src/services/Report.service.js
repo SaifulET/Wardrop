@@ -4,6 +4,9 @@ import Outfit from "../models/Outfit.js";
 import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
+
+import mongoose from "mongoose";
+
 export const createReportService = async ({ reporterId, targetUserId, targetCommunity, reason, reportType }) => {
   console.log(reporterId,targetUserId,targetCommunity,reason,reportType)
 
@@ -26,7 +29,7 @@ export const createReportService = async ({ reporterId, targetUserId, targetComm
       reason,
       reportType,
     });
-
+    community.reports.push({ user: reporterId, message: reason });
     await createAdminNotification({
       userId: reporterId,
       ReportId: report._id
@@ -154,3 +157,56 @@ console.log(reportType)
   return reports;
 };
 
+
+
+
+
+
+export const getReportDetailsByIdService = async (reportId) => {
+  if (!mongoose.Types.ObjectId.isValid(reportId)) {
+    throw new Error("Invalid reportId");
+  }
+
+  // Step 1: Find the report inside Community.reports
+  const community = await Community.findOne({ "reports._id": reportId });
+  console.log(community)
+  if (!community) {
+    throw new Error("Report not found");
+  }
+ 
+
+  const report = community.reports.id(reportId); // extract specific report
+
+  // Step 2: Handle based on type
+  if (report.reportType === "Post") {
+    const outfit = await Outfit.findById(community.post).select("title image createdAt");
+    return {
+      reportId: report._id,
+      reportType: "Post",
+      reportedAt: report.reportedAt,
+      reason: report.message,
+      outfit: outfit
+        ? {
+            title: outfit.title,
+            image: outfit.image,
+            createdAt: outfit.createdAt,
+          }
+        : null,
+    };
+  }
+
+  if (report.reportType === "Profile") {
+    const user = await User.findById(report.targetUser).select(
+      "username name email phone profileImage bio gender dob location createdAt"
+    );
+    return {
+      reportId: report._id,
+      reportType: "Profile",
+      reportedAt: report.reportedAt,
+      reason: report.message,
+      user,
+    };
+  }
+
+  return null;
+};
