@@ -35,7 +35,7 @@ let AdminnNotification;
 };
 
 export const getAdminNotifications = async (userId) => {
-  return AdminNotification.find({ user: userId })
+  return AdminNotification.find()
     .sort({ createdAt: -1 })
     .populate("Registration Report Feedback delete");
 };
