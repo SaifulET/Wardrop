@@ -163,3 +163,35 @@ export const changePasswordController = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+export const googleSignInController = async (req, res) => {
+  try {
+    const { email, profileImage } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const { user, token } = await authService.googleSignInService(email, profileImage);
+
+    // set token in cookies
+   res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+
+    return res.status(200).json({
+      message: "Google Sign-In successful",
+      user,
+      token,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+

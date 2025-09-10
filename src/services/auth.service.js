@@ -287,3 +287,37 @@ export const changePasswordService = async (userId, currentPassword, newPassword
 
   return { message: "Password updated successfully" };
 };
+
+
+
+
+
+
+
+
+export const googleSignInService = async (email, profileImage) => {
+  try {
+    // check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // create new user if not exists
+      user = new User({
+        email,
+        profileImage,
+        password: crypto.randomBytes(16).toString("hex"), // random password
+        active: true,
+      });
+      await user.save();
+    }
+
+    // create token
+   const token = jwt.sign({ id: user._id }, JWT_KEY, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+
+    return { user, token };
+  } catch (error) {
+    throw new Error("Google SignIn failed: " + error.message);
+  }
+};

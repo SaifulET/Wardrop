@@ -4,8 +4,8 @@ import * as itemService from "../services/item.service.js";
 export const createItem = async (req, res, next) => {
   try {
     
-    const data =JSON.parse(req.body.data);
-    // const data=req.body;
+    // const data =JSON.parse(req.body.data);
+    const data=req.body;
     console.log(data,"from 9th")
     
     
