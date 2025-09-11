@@ -11,7 +11,7 @@ const MaterialsSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // admin who created it
-      required: true,
+      
     },
   },
   { timestamps: true }

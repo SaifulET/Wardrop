@@ -7,8 +7,7 @@ const outfitSchema = new Schema(
     image: { type: String,  }, 
     season: { type: [String], default: [] }, 
     style: { type: mongoose.Schema.Types.ObjectId, ref: "Style" },  
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    colors: { type: [String], default: [] }, 
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, 
     usage:{ type: Number, default: 0 },
     active:{type:Boolean,default:true},
     count:{type:Number,default:0}

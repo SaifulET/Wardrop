@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Outfit from "../models/Outfit.js";
 import Planner from "../models/Planner.js";
+import Item from "../models/Item.js";
 
 
 
@@ -46,7 +47,7 @@ export const getUserColorsStats = async (userid) => {
   try {
 
 
-    const result = await Outfit.aggregate([
+    const result = await Item.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userid) } }, // filter user's outfits
       { $unwind: "$colors" }, // break arrays into individual colors
       {

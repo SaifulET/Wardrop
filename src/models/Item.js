@@ -6,7 +6,7 @@ const itemSchema = new Schema({
   brand: { type: String ,required: true},
   category: [{ type: Schema.Types.ObjectId, ref: "Category" ,required: true}],
   material: [{ type: Schema.Types.ObjectId, ref: "Material"}],        
-  colors: [String],
+  colors: { type: [String], default: [] },
   season: [String],
   style: [String],
   image: { type: String ,required: true}

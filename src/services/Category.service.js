@@ -1,5 +1,8 @@
 import category from "../models/category.js";
 import Outfit from "../models/Outfit.js";
+import { sendNotificationToUser } from "../socket.js";
+import { createNotification } from "./Notification.service.js";
+import Notification from "../models/Notification.js";
 
 // Create Style (Admin only)
 export const createCategoryService = async (categoryData, adminId) => {
@@ -9,6 +12,13 @@ export const createCategoryService = async (categoryData, adminId) => {
   if(ctg.length<1)
   {
     const Category = await category.create({ ...categoryData, createdBy: adminId });
+  const msg= `New Category created: ${Category.name}`;
+    const notification= await Notification.create({
+        user: adminId,
+        adminMessage: msg,
+      });
+    await sendNotificationToUser("admin", notification);
+
   return Category;
   }
   return "Category already exist"

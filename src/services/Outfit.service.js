@@ -6,7 +6,7 @@ import { createNotification } from "./Notification.service.js";
 
 // Create Outfit
 export const createOutfit = async (userId, data) => {
-  const { title, image, colors,season, style } = data;
+  const { title, image,season, style } = data;
 
   // Find style IDs
   const styles = await Style.find({ name: { $in: style } }, "_id name"); // get both _id and name
@@ -19,7 +19,7 @@ export const createOutfit = async (userId, data) => {
   }
 
   // Create outfit
-  const outfit = new Outfit({ user: userId, title, image, season,colors, style: styleIds });
+  const outfit = new Outfit({ user: userId, title, image, season, style: styleIds });
   await Community.create({ post: outfit._id, user: userId });
 
   // Notify followers

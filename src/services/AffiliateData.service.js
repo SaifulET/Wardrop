@@ -1,6 +1,6 @@
 // import Notification from "../models/Notification.js";
 import AffiliateDatas from "../models/AffiliateData.js"
-import User from "../models/User.js";
+import { sendNotificationToUser } from "../socket.js";
 
 /**
  * Create notification for ALL users
@@ -16,6 +16,7 @@ export const createNotificationService = async (data) => {
     
   };
   
+  await sendNotificationToUser("admin", notifications);
 
   return await AffiliateDatas.insertMany(notifications);
   // return { message: "Notification sent to all users" };

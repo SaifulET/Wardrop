@@ -1,8 +1,16 @@
 import Metarial from "../models/Materials.js";
+import Notification from "../models/Notification.js";
+import { sendNotificationToUser } from "../socket.js";
 
 // Create Style (Admin only)
 export const createMetarialsService = async (MetarialsData, adminId) => {
   const Metarials = await Metarial.create({ ...MetarialsData, createdBy: adminId });
+const msg= `New Metarials created: ${Metarials.name}`;
+  const notification= await Notification.create({
+      user: adminId,
+      adminMessage: msg,
+    });
+  await sendNotificationToUser("admin", notification);
   return Metarials;
 };
 

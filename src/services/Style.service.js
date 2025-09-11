@@ -1,9 +1,18 @@
 import Outfit from "../models/Outfit.js";
 import Style from "../models/Style.js";
+import { sendNotificationToUser } from "../socket.js";
+import Notification from "../models/Notification.js";
+
 
 // Create Style (Admin only)
 export const createStyleService = async (styleData, adminId) => {
   const style = await Style.create({ ...styleData, createdBy: adminId });
+  const msg= `New Style created: ${style.name}`;
+  const notification= await Notification.create({
+      user: adminId,
+      adminMessage: msg,
+    });
+  await sendNotificationToUser("admin", notification);
   return style;
 };
 
