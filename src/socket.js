@@ -31,6 +31,7 @@ export const initSocket = (server) => {
 
 // Function to emit notification to a specific user
 export const sendNotificationToUser = (userId, notification) => {
+  console.log("Sending notification to user:", userId, notification);
   if (io) {
     io.to(userId.toString()).emit("notification", notification);
   }

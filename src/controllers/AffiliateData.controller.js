@@ -10,6 +10,7 @@ export const createAffiliateData = async (req, res) => {
   try {
 
 // const data =JSON.parse(req.body.data);
+const userId = req.headers.user_id;
     const data=req.body;
     console.log(data,"from 9th")
      
@@ -18,7 +19,7 @@ if (req.file) {
   data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 }
 
-    const result = await createNotificationService(data);
+    const result = await createNotificationService(userId,data);
     res.status(201).json({ success: true, data: result });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
