@@ -1,3 +1,4 @@
+import Outfit from "../models/Outfit.js";
 import Planner from "../models/Planner.js";
 import { schedulePlannerNotification } from "../utils/SchedulePlanner.js";
 
@@ -11,7 +12,17 @@ export const createPlanner = async (outfitId, date, time, userId) => {
   const planner = new Planner({ user: userId, outfit: outfitId, date, time: timeAmPm });
   schedulePlannerNotification(planner);
 
+
   const savedPlanner = await planner.save();
+
+ await Outfit.findOneAndUpdate(
+      { _id: outfitId, user: userId },
+      { 
+        $inc: { count: 1 } 
+      },
+      { new: true, runValidators: true }
+    )
+
 
   return await Planner.findById(savedPlanner._id)
     .populate("user", "name profileImage")

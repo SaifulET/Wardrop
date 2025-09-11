@@ -10,7 +10,8 @@ const outfitSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     usage:{ type: Number, default: 0 },
-    active:{type:Boolean,default:true}
+    active:{type:Boolean,default:true},
+    count:{type:Number,default:0}
   },
   { timestamps: true }
 );
