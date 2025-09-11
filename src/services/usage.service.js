@@ -24,7 +24,7 @@ export const getWardropUsage = async ({userid}) => {
 // Get top 5 outfits based on count
 export const getTopOutfits = async (userid) => {
   try {
-    const topOutfits = await Outfit.findOne({user:userid})
+    const topOutfits = await Outfit.find({user:userid})
       .sort({ count: -1 })   // sort descending by count
       .limit(5)              // take top 5
       .populate("style","name")     // optional, if style is ref
