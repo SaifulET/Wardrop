@@ -6,7 +6,7 @@ const notificationSchema = new mongoose.Schema({
   Report:{ type: mongoose.Schema.Types.ObjectId, ref: "Report" },
   Feedback:{ type: mongoose.Schema.Types.ObjectId, ref: "Feedback" },
   delete:{ type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  
+  message:{ type: String },
   read: { type: Boolean, default: false },
 }, { timestamps: true });
 
