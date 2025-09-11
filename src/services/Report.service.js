@@ -192,8 +192,11 @@ console.log(reportss);
 
 
     const outfit = await Outfit.findById(community.post).select("title image createdAt");
+     const user = await User.findById(reportss.targetUser).select(
+      "username name email phone profileImage bio gender dob location createdAt"
+    );
     return {
-      reportId: reportss._id,
+      reportUser:user,
       reportedBy: reportss.reporter,
       reportType: "Post",
       reportedAt: reportss.reportedAt,
@@ -214,7 +217,7 @@ console.log(reportss);
       "username name email phone profileImage bio gender dob location createdAt"
     );
     return {
-      reportId: reportss._id,
+      reportUserId: reportss.targetUser,
       reportedBy: reportss.reporter,
       reportType: "Profile",
       reportedAt: reportss.reportedAt,

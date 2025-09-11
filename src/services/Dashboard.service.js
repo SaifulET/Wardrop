@@ -155,7 +155,7 @@ export const getUserActivityStats = async (period = "monthly") => {
   }
 ]);
 
-console.log( result[0].newUsers[0].count)
+console.log( result[0].newUsers)
   return {
     newUsers:  result[0].newUsers,
     oldUsers: result[0].oldUsers
