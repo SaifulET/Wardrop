@@ -15,9 +15,9 @@ export const createOutfitController = async (req, res) => {
 
     // const { title, season, style } = JSON.parse(req.body.data);
     // const data=JSON.parse(req.body.data)
-    // const { title, season, style } = data;
-    const { title, season, style } = req.body;
-    console.log("Parsed data:", title, season, style);
+    // const { title, season, style ,colors} = data;
+    const { title, season, style ,colors} = req.body;
+    console.log("Parsed data:", title, season, style,colors);
     let imageUrl = null;
 if (req.file) {
   imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
@@ -33,7 +33,7 @@ if (req.file) {
     // if (!imagePath) return res.status(400).json({ error: "Image is required" });
 
     // const outfit = await createOutfit(userId, { title, season, style, image: imagePath });
-    const outfit = await createOutfit(userId, { title, season, style, image: imageUrl });
+    const outfit = await createOutfit(userId, { title, season, style,colors, image: imageUrl });
     res.status(201).json(outfit);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -82,10 +82,10 @@ export const updateOutfitController = async (req, res) => {
     let updateData = {};
     if (req.body) {
       //  const { title, season, style } = JSON.parse(req.body.data);
-      const { title = null, season = null, style = null } = req.body;
+      const { title = null, season = null, style = null,colors=null } = req.body;
 
       // If new image is uploaded
-      updateData = { title, season, style };
+      updateData = { title, season, style,colors  };
     }
     if (req.file) {
 

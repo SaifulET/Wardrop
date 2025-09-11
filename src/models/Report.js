@@ -6,7 +6,7 @@ const ReportSchema = new mongoose.Schema({
   targetCommunity: { type: mongoose.Schema.Types.ObjectId, ref: "Outfit", default: null }, // if reportType = post
   reason: { type: String, required: true },
   reportType: { type: String, enum: ["Profile", "Post"], required: true },
-  status: { type: String, enum: ["Pending", "Banned"], default: "Pending" },
+  status: { type: String, enum: ["Pending", "Resolved"], default: "Pending" },
   reportedAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 

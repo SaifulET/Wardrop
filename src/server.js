@@ -35,6 +35,7 @@ import AdminNotificationRoute from "./routes/AdminNotification.routes.js";
 import { userInfo } from "os";
 import UserInfoRoute from "./routes/userinfoById.routes.js";
 import MyCommunityRoute from "./routes/MyCommunity.routes.js";
+import usageRoute from "./routes/usage.routes.js";
 
 dotenv.config();
 const app = express();
@@ -93,6 +94,7 @@ app.use("/AdminNotification", AdminNotificationRoute);
 app.use("/userInfoById",UserInfoRoute);
 
 app.use("/mycommunity",MyCommunityRoute);
+app.use("/usage", usageRoute);
 
 
 // MongoDB Connection

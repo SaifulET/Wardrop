@@ -6,7 +6,7 @@ import { createNotification } from "./Notification.service.js";
 
 // Create Outfit
 export const createOutfit = async (userId, data) => {
-  const { title, image, season, style } = data;
+  const { title, image, colors,season, style } = data;
 
   // Find style IDs
   const styles = await Style.find({ name: { $in: style } }, "_id name"); // get both _id and name
@@ -19,7 +19,7 @@ export const createOutfit = async (userId, data) => {
   }
 
   // Create outfit
-  const outfit = new Outfit({ user: userId, title, image, season, style: styleIds });
+  const outfit = new Outfit({ user: userId, title, image, season,colors, style: styleIds });
   await Community.create({ post: outfit._id, user: userId });
 
   // Notify followers
@@ -56,7 +56,7 @@ export const getOutfitById = async (outfitId, userId) => {
 
 // Update Outfit
 export const updateOutfit = async (outfitId, userId, data) => {
-  const { title, image,style } = data;
+  const { title, image,style} = data;
 
   
   // Find style IDs
@@ -69,12 +69,12 @@ export const updateOutfit = async (outfitId, userId, data) => {
       _id: { $ne: outfitId },
       user: userId,
       title,
+
       style:styleIds,
       image,
     });
     if (duplicate) throw new Error("Outfit with same title and image already exists");
   }
-
   // Update the outfit and return the updated document
   const updatedOutfit = await Outfit.findOneAndUpdate(
     { _id: outfitId, user: userId },
