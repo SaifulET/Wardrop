@@ -11,8 +11,11 @@ import Planner from "../models/Planner.js";
 
 export const getWardropUsage = async ({userid}) => {
   const totalOutfit= await Outfit.countDocuments({user:userid});
+  console.log("totalOutfit",totalOutfit)
   const totalPlanner= await Planner.countDocuments({user:userid});
+  console.log("totalPlanner",totalPlanner)
   const usage= totalPlanner*100/(totalOutfit)
+
     return usage;
 };
 

@@ -99,18 +99,18 @@ export const toggleReportStatusService = async (reportId) => {
   if (!report) throw new Error("Report not found");
 
   // Toggle between "pending" and "banned"
-  report.status = report.status === "Pending" ? "Banned" : "Pending";
+  report.status = report.status === "Pending" ? "Resolved" : "Pending";
   await report.save();
   console.log(report.status)
   // If banned and post type, deactivate related post
-  if (report.status === "Banned" && report.reportType === "Post" && report.targetCommunity) {
+  if (report.status === "Resolved" && report.reportType === "Post" && report.targetCommunity) {
     const community = await Community.findById(report.targetCommunity);
     if (community) {
       await Outfit.findByIdAndUpdate(community.post, { active: false }); // deactivate post
     }
   }
   console.log(report.targetUser.toString())
-  if(report.status==="Banned" && report.reportType==="Profile" ){
+  if(report.status==="Resolved" && report.reportType==="Profile" ){
     await User.findByIdAndUpdate({_id:report.targetUser.toString()}, { disabled:true }); 
   }
 

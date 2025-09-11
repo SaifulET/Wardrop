@@ -15,6 +15,7 @@ export const createNotificationService = async (data) => {
     link: data.link,
     
   };
+  
 
   return await AffiliateDatas.insertMany(notifications);
   // return { message: "Notification sent to all users" };
