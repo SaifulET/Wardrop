@@ -7,16 +7,17 @@ import {
   countStyleUsageController
 } from "../controllers/style.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
+import { authChecks } from "../middlewares/authForAdmin.middleware.js";
 
 const StyleRoute = express.Router();
 
 // Public: Get styles
-StyleRoute.get("/getAllStyle",authCheck, getAllStylesController);
+StyleRoute.get("/getAllStyle", getAllStylesController);
 
 // Admin only: Manage styles
-StyleRoute.post("/createStyle", authCheck, createStyleController);
-StyleRoute.put("/UpdateStyle/:id", authCheck, updateStyleController);
-StyleRoute.delete("/DeleteStyle/:id",authCheck, deleteStyleController);
-StyleRoute.get("/CountEachStyle",authCheck, countStyleUsageController);
+StyleRoute.post("/createStyle", authChecks, createStyleController);
+StyleRoute.put("/UpdateStyle/:id", authChecks, updateStyleController);
+StyleRoute.delete("/DeleteStyle/:id",authChecks, deleteStyleController);
+StyleRoute.get("/CountEachStyle",authChecks, countStyleUsageController);
 
 export default StyleRoute;

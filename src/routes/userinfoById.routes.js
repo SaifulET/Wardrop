@@ -6,6 +6,7 @@ import {
   getUserLookbooksController
 } from "../controllers/UserinfoById.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
+import { authChecks } from "../middlewares/authForAdmin.middleware.js";
 
 const UserInfoRoute = express.Router();
 

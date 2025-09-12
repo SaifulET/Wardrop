@@ -14,7 +14,15 @@ const userId = req.headers.user_id;
     const data=req.body;
     console.log(data,"from 9th")
      
-   
+   if(data.title==="" || data.title===undefined||data.title===null){
+      return res.status(400).json({ message: "Title is required" });
+    }
+    if(data.description==="" || data.description===undefined||data.description===null){
+      return res.status(400).json({ message: "Description is required" });
+    }
+    if(data.link==="" || data.link===undefined||data.link===null){
+      return res.status(400).json({ message: "Link is required" });
+    }
 if (req.file) {
   data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 }

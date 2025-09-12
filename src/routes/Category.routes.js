@@ -6,16 +6,16 @@ import {
   deleteCategoryController,
   getAllCategoryController
 } from "../controllers/category.controller.js";
-import { authCheck } from "../middlewares/auth.middleware.js";
+import { authChecks } from "../middlewares/authForAdmin.middleware.js";
 
 const CategoryRoute = express.Router();
 
 // Public: Get styles
-CategoryRoute.get("/getAllCategory",authCheck, getAllCategoryController);
+CategoryRoute.get("/getAllCategory", getAllCategoryController);
 
 // Admin only: Manage styles
-CategoryRoute.post("/createCategory", authCheck, createCategoryController);
-CategoryRoute.put("/UpdateCategory/:id", authCheck, updateCategoryController);
-CategoryRoute.delete("/DeleteCategory/:id",authCheck, deleteCategoryController);
+CategoryRoute.post("/createCategory", authChecks, createCategoryController);
+CategoryRoute.put("/UpdateCategory/:id", authChecks, updateCategoryController);
+CategoryRoute.delete("/DeleteCategory/:id",authChecks, deleteCategoryController);
 
 export default CategoryRoute;

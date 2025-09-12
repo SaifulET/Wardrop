@@ -1,20 +1,20 @@
 import express from "express";
 import { signup, signin, forgotPassword, googleLogin,  signout, updateAdminProfileController, VerifyAdminEmail, resetAdminPasswordController, getAdminProfileController } from "../controllers/AdminAuth.controller.js";
-import {authCheck}from"../middlewares/auth.middleware.js"
-import { SingleuploadMiddleware, uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
+import {authChecks}from"../middlewares/authForAdmin.middleware.js"
+import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
 const AdminAuthRoutes = express.Router();
 
 
 AdminAuthRoutes.post("/signin", signin)
 AdminAuthRoutes.post("/signup",signup )
-AdminAuthRoutes.post("/ProfileUpdate",authCheck,SingleuploadMiddleware,updateAdminProfileController )
+AdminAuthRoutes.post("/ProfileUpdate",authChecks,SingleuploadMiddleware,updateAdminProfileController )
 AdminAuthRoutes.post("/forgot-password",forgotPassword )
 AdminAuthRoutes.post("/reset-password", resetAdminPasswordController)
 AdminAuthRoutes.post("/verifyAdminEmail", VerifyAdminEmail)
 AdminAuthRoutes.post("/google",googleLogin )
-AdminAuthRoutes.get("/signout",authCheck, signout)
-AdminAuthRoutes.get("/GetAdminProfile",authCheck,getAdminProfileController )
+AdminAuthRoutes.get("/signout",authChecks, signout)
+AdminAuthRoutes.get("/GetAdminProfile",authChecks,getAdminProfileController )
 
 
 

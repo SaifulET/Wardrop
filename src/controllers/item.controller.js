@@ -6,12 +6,22 @@ export const createItem = async (req, res, next) => {
     
     // const data =JSON.parse(req.body.data);
     const data=req.body;
-    if(!data.title){
-      res.status(400).json({ message: "Title is required" });
+    if(data.title==="" || data.title===undefined||data.title===null){
+      return res.status(400).json({ message: "Title is required" });
     }
-    if(!data.brand){
-      res.status(400).json({ message: "Brand is required" });
+    if(data.brand==="" || data.brand===undefined||data.brand===null){
+      return res.status(400).json({ message: "Brand is required" });
     }
+    if(data.category==="" || data.category===undefined||data.category===null){
+      return res.status(400).json({ message: "Category is required" });
+    }
+    if(data.season==="" || data.season===undefined||data.season===null){
+      return res.status(400).json({ message: "Season is required" });
+    }
+    if(data.style==="" || data.style===undefined||data.style===null){
+      return res.status(400).json({ message: "style is required" });
+    }
+
     console.log(data,"from 9th")
     
     

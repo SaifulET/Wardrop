@@ -7,12 +7,12 @@ import {
   getAffiliatedDataById
 } from "../controllers/AffiliateData.controller.js";
 import { SingleuploadMiddleware, uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
-import {authCheck}from"../middlewares/auth.middleware.js"
+import {authChecks}from"../middlewares/authForAdmin.middleware.js"
 
 const AffiliateDataRoute = express.Router();
 
 // Admin notification management
-AffiliateDataRoute.post("/notifications", authCheck,SingleuploadMiddleware, createAffiliateData);     // Create
+AffiliateDataRoute.post("/notifications", authChecks,SingleuploadMiddleware, createAffiliateData);     // Create
 AffiliateDataRoute.get("/getnotifications", getAllAffiliateData);     // View all
 AffiliateDataRoute.get("/notificationsById/:id", getAffiliatedDataById);     // View all
 AffiliateDataRoute.put("/notifications/:id",SingleuploadMiddleware, editAffiliateData);    // Edit

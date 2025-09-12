@@ -4,7 +4,7 @@ import crypto from "crypto";
 import  SendEmail  from "./email.service.js"; // implement email sending
 import { OAuth2Client } from "google-auth-library";
 import appleSigninAuth from "apple-signin-auth";
-import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
+import { JWT_EXPIRE_TIME, JWT_KEY, JWT_KEY_ADMIN } from "../config/token.config.js";
 import Admin from "../models/Admin.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
@@ -35,7 +35,7 @@ export const signup = async (data) => {
       password: hashedPassword 
     });
     
-      const token = jwt.sign({ id: admin._id }, JWT_KEY, {
+      const token = jwt.sign({ id: admin._id }, JWT_KEY_ADMIN, {
     expiresIn: JWT_EXPIRE_TIME || "7d",
   });
 
@@ -60,7 +60,7 @@ export const signin = async (email, password) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid password");
 
-  const token = jwt.sign({ id: user._id }, JWT_KEY, {
+  const token = jwt.sign({ id: user._id }, JWT_KEY_ADMIN, {
     expiresIn: JWT_EXPIRE_TIME || "7d",
   });
 await Admin.findOneAndUpdate(

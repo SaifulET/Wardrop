@@ -1,7 +1,6 @@
 import express from "express";
 import { signup, signin, forgotPassword, resetPassword, googleLogin, appleLogin, signout, verifyOtpController, changePasswordController, googleSignInController } from "../controllers/auth.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
-import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 const authRoutes = express.Router();
 
 
