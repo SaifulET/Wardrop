@@ -6,10 +6,10 @@ export const createItem = async (req, res, next) => {
     
     // const data =JSON.parse(req.body.data);
     const data=req.body;
-    if(data.title){
+    if(!data.title){
       res.status(400).json({ message: "Title is required" });
     }
-    if(data.brand){
+    if(!data.brand){
       res.status(400).json({ message: "Brand is required" });
     }
     console.log(data,"from 9th")
