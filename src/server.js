@@ -43,9 +43,22 @@ const server = http.createServer(app);
 const io = initSocket(server);
 
 // Middlewares
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ss-dashboard-fixed.vercel.app",
+  "https://style-sync-dashboard.vercel.app/"
+];
+
 app.use(cors({
-  origin: "*", // allows all domains
-  credentials: true, // only works if you specify an origin, not "*"
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // allow the request
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
