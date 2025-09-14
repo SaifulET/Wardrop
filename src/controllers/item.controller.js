@@ -4,8 +4,8 @@ import * as itemService from "../services/item.service.js";
 export const createItem = async (req, res, next) => {
   try {
     
-    const data =JSON.parse(req.body.data);
-    // const data=req.body;
+    // const data =JSON.parse(req.body.data);
+    const data=req.body;
     if(data.title==="" || data.title===undefined||data.title===null ||data.title.trim(" ").length===0){
       return res.status(400).json({ message: "Title is required" });
     }

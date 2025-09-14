@@ -11,9 +11,6 @@ console.log(data,"from 7 line")
     // Convert category names to ObjectIds
 
     const categoryDocs = await Category.find({ name: { $in: category } });
-    if(categoryDocs.length!==category.length){
-      return "Category not found"
-    }
     const materialDocs = await Materials.find({ name: { $in: material } });
 
 console.log(categoryDocs,"kk")
