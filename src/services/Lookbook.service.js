@@ -3,7 +3,9 @@ import { Lookbook } from "../models/Lookbook.js";
 // Create
 export const createLookbook = async (data, userId) => {
  
-
+  if(data.name  === undefined || data.name.trim() === "" || data.name===null) {
+    throw new Error("Lookbook name is required");
+  } 
     const lookbook = new Lookbook({ ...data, user: userId });
     return await lookbook.save();
  

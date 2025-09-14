@@ -44,8 +44,8 @@ const io = initSocket(server);
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:5173", // your frontend URL
-  credentials: true // if sending cookies or auth headers
+  origin: "*", // allows all domains
+  credentials: true, // only works if you specify an origin, not "*"
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
