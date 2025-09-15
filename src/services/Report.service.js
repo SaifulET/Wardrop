@@ -77,21 +77,52 @@ export const getAllReportsService = async () => {
 export const deleteReportByIdService = async (reportId) => {
   const report = await Report.findById(reportId);
   if (!report) throw new Error("Report not found");
+  const community = await Community.findById(report.targetCommunity);
+  if (community.active === false && report.reportType === "Post"  ) {
+    await Community.findByIdAndDelete(community._id);
+  }
+
+
+  await Report.findByIdAndDelete(reportId);
+    
+}
+
+export const deleteReportWithcommunityByIdService = async (reportId) => {
+  const report = await Report.findById(reportId);
+  if (!report) throw new Error("Report not found");
 
   if (report.reportType === "Post" && report.targetCommunity) {
     // Delete the community post
     const community = await Community.findById(report.targetCommunity);
     if (community) {
-      await Outfit.findByIdAndDelete(community.post); // delete outfit
       await Community.findByIdAndDelete(community._id); // delete community reference
     }
   }
-
   // Delete the report itself
   await Report.findByIdAndDelete(reportId);
 
   return { message: "Report and related post (if any) deleted successfully" };
 };
+
+export const bannnedPostService = async (reportId) => {
+
+  const report = await Report.findById(reportId);
+  const community = await Community.findById(report.targetCommunity);
+  report.status = "Banned";
+  await report.save();  
+  
+  if (!community) throw new Error("Community post not found");   
+  
+    if (community) {
+      community.active = false; // deactivate post
+      await community.save();
+
+    }
+
+}
+
+
+
 
 // 2️⃣ Toggle report status
 export const toggleReportStatusService = async (reportId) => {
@@ -99,16 +130,38 @@ export const toggleReportStatusService = async (reportId) => {
   if (!report) throw new Error("Report not found");
 
   // Toggle between "pending" and "banned"
-  report.status = report.status === "Pending" ? "Resolved" : "Pending";
+  if (report.status === "Resolved") {
+    report.status = "Pending";
+  }
+  else if (report.status === "Pending") {
+    report.status = "Resolved";
+  }
+  else{
+    report.status = "Resolved";
+
+  }
+  
   await report.save();
   console.log(report.status)
   // If banned and post type, deactivate related post
-  if (report.status === "Resolved" && report.reportType === "Post" && report.targetCommunity) {
+  if (report.status != "Banned" && report.reportType === "Post" && report.targetCommunity) {
     const community = await Community.findById(report.targetCommunity);
     if (community) {
-      await Outfit.findByIdAndUpdate(community.post, { active: false }); // deactivate post
+      community.active = true; // activate post
+      await community.save();
+
     }
   }
+  // else if (report.status === "Banned" && report.reportType === "Post" && report.targetCommunity) {
+  //   const community = await Community.findById(report.targetCommunity);
+  //   if (community) {
+  //     community.active = false; // deactivate post
+  //     await community.save();
+
+  //   }
+  // }
+
+
   console.log(report.targetUser.toString())
   if(report.status==="Resolved" && report.reportType==="Profile" ){
     await User.findByIdAndUpdate({_id:report.targetUser.toString()}, { disabled:true }); 
@@ -228,4 +281,4 @@ console.log(reportss);
   }
 
   return null;
-};
+}

@@ -19,7 +19,8 @@ const CommunitySchema = new mongoose.Schema({
       message: { type: String, required: true },
       reportedAt: { type: Date, default: Date.now }
     }
-  ]
+  ],
+  active: { type: Boolean, default: true }
 
 }, { timestamps: true });
 

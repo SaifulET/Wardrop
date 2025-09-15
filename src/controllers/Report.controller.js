@@ -1,4 +1,4 @@
-import { createReportService, deleteReportByIdService, getAllReportsService, searchReportsService, toggleReportStatusService,getReportDetailsByIdService } from "../services/Report.service.js";
+import { createReportService, deleteReportByIdService, getAllReportsService, searchReportsService, toggleReportStatusService,getReportDetailsByIdService, deleteReportWithcommunityByIdService, bannnedPostService } from "../services/Report.service.js";
 
 export const createReportController = async (req, res) => {
   try {
@@ -69,6 +69,15 @@ export const deleteReportByIdController = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+export const deleteReportwithCommunityByIdController = async (req, res) => {
+  try {
+    const { reportId } = req.body;
+    const result = await deleteReportWithcommunityByIdService(reportId);
+    res.status(200).json({ success: true, result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 
 export const toggleReportStatusController = async (req, res) => {
@@ -80,6 +89,18 @@ export const toggleReportStatusController = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+export const BannedStatusController = async (req, res) => {
+  try {
+    const { reportId } = req.body;
+    const updatedReport = await bannnedPostService(reportId);
+    res.status(200).json({ success: true, report: updatedReport });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+
 
 export const searchReportsController = async (req, res) => {
   try {

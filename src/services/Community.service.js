@@ -9,10 +9,11 @@ export const getAllPostsService = async () => {
 
   // 2. Fetch all community data for those posts
   const CommunityPost = await Community.find({
-    post: { $in: posts.map(p => p._id) }
-  })
-    .populate("reactions.user") // load full user object for reactors
-    .lean();
+  post: { $in: posts.map(p => p._id) },
+  active: true
+})
+  .populate("reactions.user") // load full user object for reactors
+  .lean();
 
   // 3. Merge posts with community data
   const CommunityWithPost = posts.map(post => {
