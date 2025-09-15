@@ -5,6 +5,10 @@ export const createWishlist = async (req, res) => {
     
   //  const data= JSON.parse(req.body.data);
    const data= req.body
+   if(!data.name || data.name.trim()==="" || data.name===" " || data.name===null || data.name===undefined){
+    throw new Error("Name is required");
+   }
+
 
     let imageUrls = [];
     if (req.files && req.files.length > 0) {
