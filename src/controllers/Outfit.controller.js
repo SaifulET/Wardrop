@@ -14,10 +14,10 @@ export const createOutfitController = async (req, res) => {
     const userId = req.headers.user_id;
 
     // const { title, season, style } = JSON.parse(req.body.data);
-    // const data=JSON.parse(req.body.data)
-    // const { title, season, style } = data;
+    const data=JSON.parse(req.body.data)
+    const { title, season, style } = data;
    
-    const { title, season, style} = req.body;
+    // const { title, season, style} = req.body;
      if(title==="" || title===undefined||title===null){
       return res.status(400).json({ message: "Title is required" });
     }

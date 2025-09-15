@@ -108,15 +108,18 @@ export const bannnedPostService = async (reportId) => {
 
   const report = await Report.findById(reportId);
   const community = await Community.findById(report.targetCommunity);
-  report.status = "Banned";
-  await report.save();  
+ 
   
   if (!community) throw new Error("Community post not found");   
   
     if (community) {
-      community.active = false; // deactivate post
+      if(community.active = false)
+        community.active = true;
+      else
+        community.active = false;
       await community.save();
-
+      report.status="Resolved"
+      await report.save(); 
     }
 
 }
@@ -142,16 +145,8 @@ export const toggleReportStatusService = async (reportId) => {
   }
   
   await report.save();
-  console.log(report.status)
+ 
   // If banned and post type, deactivate related post
-  if (report.status != "Banned" && report.reportType === "Post" && report.targetCommunity) {
-    const community = await Community.findById(report.targetCommunity);
-    if (community) {
-      community.active = true; // activate post
-      await community.save();
-
-    }
-  }
   // else if (report.status === "Banned" && report.reportType === "Post" && report.targetCommunity) {
   //   const community = await Community.findById(report.targetCommunity);
   //   if (community) {
@@ -255,6 +250,7 @@ console.log(reportss);
       reportedAt: reportss.reportedAt,
       reason: reportss.reason,
       status: reportss.status,
+      PostStatus: community.active,
       outfit: outfit
         ? {
             title: outfit.title,

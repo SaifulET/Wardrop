@@ -68,11 +68,11 @@ app.use(morgan("dev"));
 app.use(helmet());
 
 // Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 100,
+// });
+// app.use(limiter);
 
 // Routes placeholder
 app.use("/auth", authRoutes);
