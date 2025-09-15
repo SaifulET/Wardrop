@@ -108,15 +108,18 @@ export const bannnedPostService = async (reportId) => {
 
   const report = await Report.findById(reportId);
   const community = await Community.findById(report.targetCommunity);
+  console.log("dl",community)
  
   
   if (!community) throw new Error("Community post not found");   
-  
+  console.log(community.active)
     if (community) {
-      if(community.active = false)
+      if(community.active === false){
         community.active = true;
+      }
       else
         community.active = false;
+
       await community.save();
       report.status="Resolved"
       await report.save(); 
