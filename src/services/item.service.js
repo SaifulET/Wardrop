@@ -113,19 +113,32 @@ if (filters.style)
   query.style = { $in: filters.style.split(",").map((s) => s.trim()) };
  
     const items = await Item.find(query)
-  .populate("category", "name")  // only return category name
-  .populate("material", "name"); // only return material name
+  .populate("category", "name -_id")  // only return category name
+  .populate("material", "name -_id")
+  .lean(); // only return material name
 
-return items;
-
+const result = items.map(item => (
+{
+  ...item,
+  category: item.category?.[0]?.name || null,   // pick first category name
+  material: item.material?.[0]?.name || null,   // pick first material name
+}));
+console.log(result)
+return result;
   
     
   }
   else{
     const item = await Item.findById({user:id})
-    .populate("category", "name")   
-    .populate("material", "name"); 
-    return item
+    .populate("category", "name -_id")   
+    .populate("material", "name -_id")
+    .lean(); 
+    const result ={
+  ...item,
+  category: item.category?.[0]?.name || null,   // pick first category name
+  material: item.material?.[0]?.name || null,   // pick first material name
+}
+    return result
   }
 };
 
