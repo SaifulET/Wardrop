@@ -9,7 +9,7 @@ const userSchema = new Schema({
   phone:{type:String, unique:true, sparse:true},
   otp: { type: String },
   otpExpires: { type: Date },
-  gender: { type: String, enum: ["male", "female", "other"] },
+  gender: { type: String},
   language: { 
   type: String, 
   enum: ["English", "Russian"], 
