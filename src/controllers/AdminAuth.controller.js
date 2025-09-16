@@ -165,3 +165,34 @@ export const getAdminProfileController = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+
+
+export const AdmingoogleSignInController = async (req, res) => {
+  try {
+    const { email, profileImage } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const { Admin, token } = await authService.AdmingoogleSignInService(email, profileImage);
+
+    // set token in cookies
+   res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+
+    return res.status(200).json({
+      message: "Google Sign-In successful",
+      Admin,
+      token,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

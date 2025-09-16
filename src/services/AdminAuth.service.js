@@ -209,3 +209,34 @@ console.log(user)
     throw error;
   }
 };
+
+
+
+
+
+export const AdmingoogleSignInService = async (email, profileImage) => {
+  try {
+    // check if user exists
+    let Admins = await Admin.findOne({ email });
+
+    if (!Admins) {
+      // create new user if not exists
+      Admins = new Admin({
+        email,
+        profile: profileImage,
+        password: crypto.randomBytes(16).toString("hex"), // random password
+        
+      });
+      await Admins.save();
+    }
+
+    // create token
+   const token = jwt.sign({ id: Admins._id }, JWT_KEY_ADMIN, {
+    expiresIn: JWT_EXPIRE_TIME || "7d",
+  });
+
+    return { Admins, token };
+  } catch (error) {
+    throw new Error("Google SignIn failed: " + error.message);
+  }
+};

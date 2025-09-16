@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, signin, forgotPassword, googleLogin,  signout, updateAdminProfileController, VerifyAdminEmail, resetAdminPasswordController, getAdminProfileController } from "../controllers/AdminAuth.controller.js";
+import { signup, signin, forgotPassword, googleLogin,  signout, updateAdminProfileController, VerifyAdminEmail, resetAdminPasswordController, getAdminProfileController, AdmingoogleSignInController } from "../controllers/AdminAuth.controller.js";
 import {authChecks}from"../middlewares/authForAdmin.middleware.js"
 import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
@@ -15,6 +15,9 @@ AdminAuthRoutes.post("/verifyAdminEmail", VerifyAdminEmail)
 AdminAuthRoutes.post("/google",googleLogin )
 AdminAuthRoutes.get("/signout",authChecks, signout)
 AdminAuthRoutes.get("/GetAdminProfile",authChecks,getAdminProfileController )
+
+AdminAuthRoutes.post("/googleApple",AdmingoogleSignInController  )
+
 
 
 
