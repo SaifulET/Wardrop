@@ -111,18 +111,27 @@ if (filters.season)
 
 if (filters.style)
   query.style = { $in: filters.style.split(",").map((s) => s.trim()) };
-  const item= await Item.find(query);
+ 
+    const items = await Item.find(query)
+  .populate("category", "name")  // only return category name
+  .populate("material", "name"); // only return material name
+
+return items;
+
   
-    return item;
+    
   }
   else{
     const item = await Item.findById({user:id})
+    .populate("category", "name")   
+    .populate("material", "name"); 
     return item
   }
 };
 
 export const getItemById = async (id,user) => {
-    const item= await Item.findById(id,{ user: user });
+    const item= await Item.findById(id,{ user: user })
+   
     return item;
 };
 
