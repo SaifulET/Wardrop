@@ -63,6 +63,7 @@ export const getAllReportsController = async (req, res) => {
 export const deleteReportByIdController = async (req, res) => {
   try {
     const { reportId } = req.body;
+    console.log(reportId)
     const result = await deleteReportByIdService(reportId);
     res.status(200).json({ success: true, result });
   } catch (error) {

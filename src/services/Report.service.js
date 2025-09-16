@@ -75,13 +75,18 @@ export const getAllReportsService = async () => {
 
 // 1️⃣ Delete report by ID
 export const deleteReportByIdService = async (reportId) => {
+  console.log("ldk",reportId,"kkdk")
   const report = await Report.findById(reportId);
+  console.log(report)
   if (!report) throw new Error("Report not found");
+  console.log("dkkd")
+  if (report.reportType === "Post" && report.targetCommunity) {
   const community = await Community.findById(report.targetCommunity);
   if (community.active === false && report.reportType === "Post"  ) {
     await Community.findByIdAndDelete(community._id);
   }
-
+}
+console.log("dkkd1")
 
   await Report.findByIdAndDelete(reportId);
     
