@@ -15,7 +15,7 @@ authRoutes.post("/google",googleLogin )
 authRoutes.post("/apple", appleLogin )
 authRoutes.post("/signout",authCheck, signout)
 authRoutes.post("/change-password",authCheck,  changePasswordController)
-authRoutes.post("/googleApple",authCheck,googleSignInController  )
+authRoutes.post("/googleApple",googleSignInController  )
 
 
 
