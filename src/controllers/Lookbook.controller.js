@@ -5,6 +5,10 @@ export const createLookbook = async (req, res) => {
   try {
     
     console.log("Creating Lookbook with data:", req.body.name);
+    const { name=null }= req.body;
+   if(name.trim()==="" || name===" " || name===null ||name===undefined || name=== "undefined"){
+    throw new Error("Lookbook Name is required");
+   }
     const lookbook = await lookbookService.createLookbook(req.body, req.headers.user_id);
     res.status(201).json(lookbook);
   } catch (err) {

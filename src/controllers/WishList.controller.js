@@ -7,7 +7,7 @@ export const createWishlist = async (req, res) => {
    const data= req.body
    const { name=null }= data;
   
-   if(name.trim()==="" || name===" " || name===nulname===undefined){
+   if(name.trim()==="" || name===" " || name===null ||name===undefined || name=== "undefined"){
     throw new Error("Name is required");
    }
 

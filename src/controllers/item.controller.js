@@ -31,7 +31,9 @@ export const createItem = async (req, res, next) => {
 if (req.file) {
   data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 }
-
+if(!data.image || data.image==="undefined" || data.image===null || data.image.trim(" ").length===0){
+  return res.status(400).json({ message: "Image is required" });
+}
     data.user= req.headers.user_id;
     const item = await itemService.createItem(data);
     res.status(201).json(item);

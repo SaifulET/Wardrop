@@ -18,23 +18,24 @@ export const createOutfitController = async (req, res) => {
     // const data=(req.body.data)
    
    const data = req.body;
-   
-     if(data.title==="" || data.title===undefined||data.title===null){
+    const { title=null, season=null, style=null } = data;
+     if(title==="" || title===undefined||title===null|| title==="undefined" || title.trim(" ").length===0){
       return res.status(400).json({ message: "Title is required" });
     }
-    if(data.season==="" || data.season===undefined||data.season===null){
+    if(season==="" || season===undefined||season===null || season==="undefined"){
       return res.status(400).json({ message: "Season is required" });
     }
-    if(data.style==="" || data.style===undefined||data.style===null){
+    if(style==="" || style===undefined||style===null || style==="undefined"){
       return res.status(400).json({ message: "Style is required" });
     }
      // const { title, season, style} = req.body;
-     const { title, season, style } = data;
+    
     console.log("Parsed data:", title, season, style);
     let imageUrl = null;
 if (req.file) {
   imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 }
+    if (!imageUrl) return res.status(400).json({ error: "Image is required" });
 
 
     // Use let here so we can reassign later
