@@ -15,18 +15,21 @@ export const createOutfitController = async (req, res) => {
 
     // const { title, season, style } = JSON.parse(req.body.data);
     // const data=JSON.parse(req.body.data)
-    // const { title, season, style } = data;
+    // const data=(req.body.data)
    
-    const { title, season, style} = req.body;
-     if(title==="" || title===undefined||title===null){
+   const data = req.body;
+   
+     if(data.title==="" || data.title===undefined||data.title===null){
       return res.status(400).json({ message: "Title is required" });
     }
-    if(season==="" || season===undefined||season===null){
+    if(data.season==="" || data.season===undefined||data.season===null){
       return res.status(400).json({ message: "Season is required" });
     }
-    if(style==="" || style===undefined||style===null){
+    if(data.style==="" || data.style===undefined||data.style===null){
       return res.status(400).json({ message: "Style is required" });
     }
+     // const { title, season, style} = req.body;
+     const { title, season, style } = data;
     console.log("Parsed data:", title, season, style);
     let imageUrl = null;
 if (req.file) {

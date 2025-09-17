@@ -47,7 +47,8 @@ const io = initSocket(server);
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ss-dashboard-fixed.vercel.app",
-  "https://style-sync-dashboard.vercel.app/"
+  "https://style-sync-dashboard.vercel.app/",
+  
 ];
 
 app.use(cors({

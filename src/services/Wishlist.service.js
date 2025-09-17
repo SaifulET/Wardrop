@@ -8,24 +8,52 @@ const arraysEqual = (a, b) => {
   return sortedA.every((val, index) => val === sortedB[index]);
 };
 
+// export const createWishlist = async (userId, data, images) => {
+
+
+//     const existingWishlists = await Wishlist.find({ user: userId, name:data.name });
+
+//   for (const wishlist of existingWishlists) {
+//     if (arraysEqual(wishlist.images, images)) {
+//       throw new Error("A wishlist with the same name and images already exists");
+//     }
+//   }
+//   const wishlist = new Wishlist({
+//     user: userId,
+//     name: data.name,
+//     images
+//   });
+//   return await wishlist.save();
+// };
+
+
+
+
 export const createWishlist = async (userId, data, images) => {
 
-
-    const existingWishlists = await Wishlist.find({ user: userId, name:data.name });
-
-  for (const wishlist of existingWishlists) {
-    if (arraysEqual(wishlist.images, images)) {
-      throw new Error("A wishlist with the same name and images already exists");
+    if(images.length === 0) {
+        throw new Error("At least one image is required to create a wishlist");
     }
-  }
-  const wishlist = new Wishlist({
+    const existingWishlists = await Wishlist.find({ user: userId, name:data.name });
+    if(existingWishlists.length ===0) {
+
+ const wishlist = new Wishlist({
     user: userId,
     name: data.name,
     images
-  });
+  })
   return await wishlist.save();
-};
 
+    }
+    else{
+     console.log("Existing wishlists with same name:", existingWishlists);
+     const wishlist = await Wishlist.findByIdAndUpdate({_id: existingWishlists[0]._id}, { $addToSet: { images: { $each: images } } }, { new: true });
+     console.log("Updated wishlist:", wishlist);
+     return wishlist;
+    }
+
+      // throw new Error("A wishlist with the same name already exists");
+    }
 export const getWishlists = async (userId) => {
   return await Wishlist.find({ user: userId });
 };
