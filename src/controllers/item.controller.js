@@ -6,19 +6,21 @@ export const createItem = async (req, res, next) => {
     
     // const data =JSON.parse(req.body.data);
     const data=req.body;
-    if(data.title==="" || data.title===undefined||data.title===null ||data.title.trim(" ").length===0){
+    
+    const {title=null, brand=null, category=null, season=null, style=null}= data;
+    if(title==="" || title===undefined||title===null ||title.trim(" ").length===0){
       return res.status(400).json({ message: "Title is required" });
     }
-    if(data.brand==="" || data.brand===undefined||data.brand===null){
+    if(brand==="" || brand===undefined||brand===null){
       return res.status(400).json({ message: "Brand is required" });
     }
-    if(data.category==="" || data.category===undefined||data.category===null){
+    if(category==="" || category===undefined||category===null){
       return res.status(400).json({ message: "Category is required" });
     }
-    if(data.season==="" || data.season===undefined||data.season===null){
+    if(season==="" || season===undefined||season===null){
       return res.status(400).json({ message: "Season is required" });
     }
-    if(data.style==="" || data.style===undefined||data.style===null){
+    if(style==="" || style===undefined||style===null){
       return res.status(400).json({ message: "style is required" });
     }
 

@@ -5,8 +5,9 @@ export const createWishlist = async (req, res) => {
     
   //  const data= JSON.parse(req.body.data);
    const data= req.body
+   const { name=null }= data;
   
-   if(!data.name || data.name.trim()==="" || data.name===" " || data.name===null || data.name===undefined){
+   if(name.trim()==="" || name===" " || name===nulname===undefined){
     throw new Error("Name is required");
    }
 
