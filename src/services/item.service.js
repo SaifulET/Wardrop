@@ -161,18 +161,15 @@ export const updateItem = async (id, data, user) => {
 
       if (cat) {
         query.category = [cat._id]; // must be an array of ObjectIds
-      } else {
-        const categoryData = {
-          name: data.category,
-          items: id,
-          user
-        };
+      } 
+      
+    }
+    if (data.material) {
+      let cat = await Materials.findOne({  name: data.material, user });
 
-        const categoryDoc = new Category(categoryData);
-        await categoryDoc.save();
-
-        query.category = [categoryDoc._id];
-      }
+      if (cat) {
+        query.material = [cat._id]; // must be an array of ObjectIds
+      } 
     }
 
     // Handle title update
@@ -186,7 +183,7 @@ export const updateItem = async (id, data, user) => {
     }
 
     // Handle other optional fields
-    if (data.material) query.material = data.material;
+    // if (data.material) query.material = data.material;
     if (data.colors) query.colors = data.colors;
     if (data.season) query.season = data.season;
     if (data.style) query.style = data.style;
