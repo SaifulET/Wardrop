@@ -6,8 +6,9 @@ export const createItem = async (req, res, next) => {
     
     // const data =JSON.parse(req.body.data);
     const data=req.body;
-    
+    console.log(data,"from 6th")
     const {title=null, brand=null, category=null, season=null, style=null}= data;
+    console.log(title, brand, category, season, style,"from 8th")
     if(title==="" || title===undefined||title===null ||title.trim(" ").length===0){
       return res.status(400).json({ message: "Title is required" });
     }
