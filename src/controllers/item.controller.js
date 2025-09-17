@@ -9,19 +9,19 @@ export const createItem = async (req, res, next) => {
     console.log(data,"from 6th")
     const {title=null, brand=null, category=null, season=null, style=null}= data;
     console.log(title, brand, category, season, style,"from 8th")
-    if(title==="" || title===undefined||title===null ||title.trim(" ").length===0){
+    if(title==="" || title==='undefined'||title===null ||title.trim(" ").length===0){
       return res.status(400).json({ message: "Title is required" });
     }
-    if(brand==="" || brand===undefined||brand===null){
+    if(brand==="" || brand==='undefined'||brand===null){
       return res.status(400).json({ message: "Brand is required" });
     }
-    if(category==="" || category===undefined||category===null){
+    if(category==="" || category==='undefined'||category===null){
       return res.status(400).json({ message: "Category is required" });
     }
-    if(season==="" || season===undefined||season===null){
+    if(season==="" || season==='undefined'||season===null){
       return res.status(400).json({ message: "Season is required" });
     }
-    if(style==="" || style===undefined||style===null){
+    if(style==="" || style==='undefined'||style===null){
       return res.status(400).json({ message: "style is required" });
     }
 
