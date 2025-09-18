@@ -20,6 +20,11 @@ export const createNotification = async ({ userId, plannerId = null, postId = nu
 
 // Get all notifications for a user
 export const getUserNotifications = async (userId) => {
+
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return Notification.find({ user: userId })
     .sort({ createdAt: -1 })
     .populate("planner post adminMessage");
@@ -27,6 +32,7 @@ export const getUserNotifications = async (userId) => {
 
 // Mark as read
 export const markAsRead = async (notificationId) => {
+  
   const notify=await  Notification.findByIdAndUpdate(notificationId, { read: true }, { 
     new: true, 
     select: "post planner read" // only post, planner and read fields

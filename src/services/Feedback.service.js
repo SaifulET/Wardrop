@@ -1,8 +1,14 @@
 import Feedback from "../models/Feedback.js";
+import User from "../models/User.js";
 import { createAdminNotification } from "./AdminNotification.services.js";
 
 // Create feedback
 export const createFeedback = async (userId, data) => {
+  const user= await User.findById({_id:userId})
+  if(!user) throw new Error("User not found")
+  if(user.disabled) throw new Error("Account  has disabled")
+
+
   const { title, message } = data;
   const feedback = new Feedback({ user: userId, title, message });
   await createAdminNotification({

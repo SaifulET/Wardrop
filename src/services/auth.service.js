@@ -75,6 +75,7 @@ const now = new Date();
 // Signin
 export const signin = async (email, password) => {
   const user = await User.findOne({ email });
+
   
   if (!user) throw new Error("User not found");
   if (user.disabled) throw new Error("Account has banned!");
@@ -130,6 +131,8 @@ export const forgotPassword = async (email) => {
   const user = await User.findOne({ email });
   
   if (!user) throw new Error("User not found");
+    if (user.disabled) throw new Error("Account has banned!");
+
 
   const otp = crypto.randomInt(1000, 9999).toString(); // 4-digit OTP
   user.otp = otp;
@@ -150,6 +153,8 @@ export const verifyOtpService = async (email, otp) => {
   const user = await User.findOne({ email });
 
   if (!user) throw new Error("User not found");
+    if (user.disabled) throw new Error("Account has banned!");
+
   if (!user.otp || !user.otpExpires) throw new Error("OTP not requested");
 
   if (user.otp !== otp) throw new Error("Invalid OTP");
@@ -173,7 +178,9 @@ export const resetPassword = async (email, password, confirmPassword ) => {
   if(password.length<6){
      throw new Error('password must be alteast 6 characters');
   }
-
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("User not found");
+    if (user.disabled) throw new Error("Account has banned!");
   const hashedPassword = await bcrypt.hash(password, 10);
   
   try {

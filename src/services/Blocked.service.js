@@ -34,6 +34,9 @@ import User from "../models/User.js";
 export const unblockUser = async (userId, targetUserId) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
+    if (user.disabled) throw new Error("Account has banned!");
+    
+
 
   user.blockedUsers = user.blockedUsers.filter(b => b.toString() !== targetUserId.toString());
 
@@ -66,6 +69,8 @@ export const blockUser = async (userId, targetUserId) => {
   const user = await User.findById(userId);
 
   if (!user) throw new Error("User not found");
+  if (user.disabled) throw new Error("Your Account has banned!");
+
 
   const isblockedUsers= user.blockedUsers.includes(targetUserId);
 

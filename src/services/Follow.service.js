@@ -2,11 +2,17 @@ import User from "../models/User.js";
 
 
 export const followUser = async (userId, targetUserId) => {
+
+
+
+
   if (userId === targetUserId) throw new Error("You cannot follow yourself");
 
   const user = await User.findById(userId);
 
   if (!user) throw new Error("User not found");
+  
+  if(user.disabled) throw new Error("Account  has disabled")
 
   const isFollowing = user.following.includes(targetUserId);
 

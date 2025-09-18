@@ -1,9 +1,15 @@
 import DressMe from "../models/DressMe.js";
 import Group from "../models/group.js";
+import User from "../models/User.js";
 
 
 export const createDressMe = async ({ title, style, season, groupsData },userId) => {
   
+const user= await User.findById({_id:userId})
+if(!user) throw new Error("User not found")
+if(user.disabled) throw new Error("Account  has disabled")
+
+
   const groupIds = [];
   
 

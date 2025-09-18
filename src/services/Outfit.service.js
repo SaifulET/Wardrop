@@ -6,6 +6,10 @@ import { createNotification } from "./Notification.service.js";
 
 // Create Outfit
 export const createOutfit = async (userId, data) => {
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
+
   const { title, image,season, style } = data;
 
   // Find style IDs
@@ -46,16 +50,29 @@ export const createOutfit = async (userId, data) => {
 
 // Get all outfits of a user
 export const getUserOutfits = async (userId) => {
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
   return await Outfit.find({ user: userId }).lean();
 };
 
 // Get single outfit details
 export const getOutfitById = async (outfitId, userId) => {
+
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
+
   return await Outfit.findOne({ _id: outfitId, user: userId }).lean();
 };
 
 // Update Outfit
 export const updateOutfit = async (outfitId, userId, data) => {
+
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
+
   const { title, image,style} = data;
 
   
@@ -94,5 +111,9 @@ export const updateOutfit = async (outfitId, userId, data) => {
 
 // Delete Outfit
 export const deleteOutfit = async (outfitId, userId) => {
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
+
   return await Outfit.findOneAndDelete({ _id: outfitId, user: userId });
 };

@@ -2,10 +2,15 @@ import Category from "../models/category.js";
 import Item from "../models/Item.js";
 import Materials from "../models/Materials.js";
 import mongoose from "mongoose";
-
+import User from "../models/User.js";
 
 export const createItem = async (data) => {
 try {
+  const user= await User.findById({_id:data.user})
+if(!user) throw new Error("User not found")
+if(user.disabled) throw new Error("Account  has disabled")
+
+
   const { category, material, ...rest } = data;
 console.log(data,"from 7 line")
     // Convert category names to ObjectIds
@@ -32,6 +37,10 @@ console.log(item)
 };
 
 export const getItems = async (filters,id) => {
+
+  const user= await User.findById({_id:id})
+if(!user) throw new Error("User not found")
+if(user.disabled) throw new Error("Account  has disabled")
 
   if(filters){
     const query = {};
@@ -143,7 +152,11 @@ return result;
 };
 
 export const getItemById = async (id,user) => {
-    const item= await Item.findById(id,{ user: user })
+  const user1= await User.findById({_id:user})
+if(!user1) throw new Error("User not found")
+if(user1.disabled) throw new Error("Account  has disabled")
+
+    const item= await Item.findById(id)
    
     return item;
 };
@@ -152,6 +165,10 @@ export const getItemById = async (id,user) => {
 
 export const updateItem = async (id, data, user) => {
   try {
+    const user= await User.findById({_id:user})
+if(!user) throw new Error("User not found")
+if(user.disabled) throw new Error("Account  has disabled")
+
     const query = {};
     console.log("Updating item with data:", data);
 
@@ -216,6 +233,7 @@ console.log(item)
   
 
 export const deleteItem = async (id) => {
+  
      await Item.findByIdAndDelete({ _id: id });
     return "user has been deleted successfully";
 };

@@ -1,8 +1,12 @@
 import Outfit from "../models/Outfit.js";
 import Planner from "../models/Planner.js";
+import User from "../models/User.js";
 import { schedulePlannerNotification } from "../utils/SchedulePlanner.js";
 
 export const createPlanner = async (outfitId, date, time, userId) => {
+    const user1 = await User.findById({ _id: userId });
+    if (!user1) throw new Error("User not found");
+    if (user1.disabled) throw new Error("Account has disabled");
   const timeAmPm = time; // convert time to AM/PM
 
   // Check duplicate
@@ -34,6 +38,10 @@ export const createPlanner = async (outfitId, date, time, userId) => {
 };
 
 export const updatePlannerTime = async (plannerId, userId, newDate, newTime) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   const timeAmPm = newTime;
 
   const planner = await Planner.findOneAndUpdate(
@@ -56,6 +64,11 @@ export const updatePlannerTime = async (plannerId, userId, newDate, newTime) => 
 
 
 export const getAllPlanners = async (userId) => {
+
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Planner.find({ user: userId })
     .populate("outfit", "title image style")
     .populate({
@@ -91,6 +104,10 @@ export const getPlannerById = async (plannerId) => {
 // };
 
 export const deletePlanner = async (plannerId, userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+  
   return await Planner.findOneAndDelete({
     _id: plannerId,
     user: userId,

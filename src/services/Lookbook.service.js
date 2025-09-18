@@ -1,7 +1,11 @@
 import { Lookbook } from "../models/Lookbook.js";
+import User from "../models/User.js";
 
 // Create
 export const createLookbook = async (data, userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
  
   if(data.name  === undefined || data.name.trim() === "" || data.name===null) {
     throw new Error("Lookbook name is required");
@@ -13,6 +17,10 @@ export const createLookbook = async (data, userId) => {
 
 // Get All for a user
 export const getLookbooks = async (userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Lookbook.find({ user: userId })
     .populate("items")
     .populate("outfits");
@@ -20,6 +28,10 @@ export const getLookbooks = async (userId) => {
 
 // Get single
 export const getLookbookById = async (id, userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Lookbook.findOne({ _id: id, user: userId })
     .populate("items")
     .populate("outfits");
@@ -27,6 +39,10 @@ export const getLookbookById = async (id, userId) => {
 
 // Update name/details
 export const updateLookbook = async (id, data, userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Lookbook.findOneAndUpdate(
     { _id: id, user: userId },
     { $set: data },
@@ -36,11 +52,20 @@ export const updateLookbook = async (id, data, userId) => {
 
 // Delete
 export const deleteLookbook = async (id, userId) => {
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Lookbook.findOneAndDelete({ _id: id, user: userId });
 };
 
 // Add items/outfits
 export const addToLookbook = async (id, data, userId) => {
+
+    const user1 = await User.findById({ _id: userId });
+  if (!user1) throw new Error("User not found");
+  if (user1.disabled) throw new Error("Account has disabled");
+
   return await Lookbook.findOneAndUpdate(
     { _id: id, user: userId },
     { $addToSet: { items: { $each: data.items || [] }, outfits: { $each: data.outfits || [] } } },
@@ -52,6 +77,7 @@ export const addToLookbook = async (id, data, userId) => {
 
 export const removeFromLookbookService = async (lookbookId, idsToRemove) => {
   // Find the lookbook first
+  
   const lookbook = await Lookbook.findById(lookbookId);
   if (!lookbook) throw new Error("Lookbook not found");
 

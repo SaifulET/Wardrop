@@ -1,6 +1,6 @@
 import Community from "../models/Community.js";
 import outfit from "../models/Outfit.js"
-
+import User from "../models/User.js"
 export const getAllPostsService = async () => {
   const communities = await Community.find({ active: true }) // ✅ active communities only
     .populate({
@@ -27,6 +27,9 @@ export const getAllPostsService = async () => {
 export const reactToPost = async (postId, userId, reactionType) => {
    
   // Ensure post exists
+  const user= await User.findById({_id:userId})
+  if(!user) throw new Error("User not found")
+  if(user.disabled) throw new Error("Account  has disabled")
   const post = await outfit.findById({_id:postId});
   if (!post) throw new Error("Post not found");
 
@@ -59,6 +62,13 @@ export const reactToPost = async (postId, userId, reactionType) => {
 
 
 export const reportPost = async (postId, userId, message) => {
+
+  
+  const user= await User.findById({_id:userId})
+  if(!user) throw new Error("User not found")
+  if(user.disabled) throw new Error("Account  has disabled")
+
+
   let postSocial = await Community.findOne({ post: postId });
   if (!postSocial) {
     postSocial = new Community({ post: postId });
